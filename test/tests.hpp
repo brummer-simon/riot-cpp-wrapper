@@ -12,6 +12,7 @@
 #include "mutex/lock_tests.hpp"
 #include "iterator/iterator_tests.hpp"
 #include "array/array_tests.hpp"
+#include "ringbuffer/ringbuffer_tests.hpp"
 
 // Run all Tests.
 auto runAllTests() -> void
@@ -24,6 +25,7 @@ auto runAllTests() -> void
     runLockTests(succeededTests, failedTests);
     runIteratorTests(succeededTests, failedTests);
     runArrayTests(succeededTests, failedTests);
+    runRingbufferTests(succeededTests, failedTests);
 
     printf("\n--- Testrun finished ---\n\n");
     printf("Tests ran: %u\n", succeededTests + failedTests);

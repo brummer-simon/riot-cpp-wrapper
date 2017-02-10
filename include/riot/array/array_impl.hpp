@@ -80,22 +80,28 @@ public:
 
     /**
      * @brief Copy-Constructor
+     * @pre @p other must be copy-assignable.
      * @param[in] other   Array to copy.
      */
     Array(const Array& other)
     {
-        memcpy(this->array_, other.array_, sizeof(this->array_));
+        for (SizeType i = 0; i < arraySize; ++i) {
+            this->array_[i] = other.array_[i];
+        }
     }
 
     /**
      * @brief Assignment operator.
+     * @pre @p other must be copy-assignable.
      * @param[in] other   Reference to object that should be assigned.
      * @return            Reference to this object
      */
     auto operator = (const Array& other) -> Array&
     {
         if (this != &other) {
-            memcpy(this->array_, other.array_, sizeof(this->array_));
+            for (SizeType i = 0; i < arraySize; ++i) {
+                this->array_[i] = other.array_[i];
+            }
         }
         return *this;
     }
@@ -285,11 +291,9 @@ public:
      */
     auto swap(Array& other) -> void
     {
-        for (SizeType i = 0; i < this->size(); ++i) {
-            ValueType tmp = array_[i];
-            array_[i] = other[i];
-            other[i] = tmp;
-        }
+        Array tmp(other);
+        other = *this;
+        *this = tmp;
     }
 
     private:
@@ -298,6 +302,7 @@ public:
 
 /**
  * @brief == operator on arrays of the same type and length.
+ * @pre T must be implement operator ==.
  * @param[in] lhs   Leftside of the operator.
  * @param[in] rhs   Rightside of the operator.
  * @returns         true if lhs and rhs internal arrays contain equal bytes.
@@ -309,11 +314,17 @@ auto operator == (const Array<T, arraySize>& lhs,
     if (&lhs == &rhs) {
         return true;
     }
-    return (0 == memcmp(lhs.data(), rhs.data(), arraySize * sizeof(T)));
+    for (std::size_t i = 0; i < arraySize; ++i) {
+        if (!(lhs[i] == rhs[i])) {
+            return false;
+        }
+    }
+    return true;
 }
 
 /**
  * @brief != operator on arrays of the same type and length.
+ * @pre T must be implement operator ==.
  * @param[in] lhs   Leftside of the operator.
  * @param[in] rhs   Rightside of the operator.
  * @returns         true if lhs and rhs internal arrays contents differ.
