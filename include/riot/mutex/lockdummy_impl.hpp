@@ -35,13 +35,15 @@ public:
     /**
      * @brief Dummy lock() method.
      */
-    auto lock() -> void {
+    auto lock() -> void
+    {
     }
 
     /**
      * @brief Dummy unlock() method.
      */
-    auto unlock() -> void {
+    auto unlock() -> void
+    {
     }
 };
 

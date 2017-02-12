@@ -30,7 +30,7 @@ namespace riot
  *        on destruction. The lock must be valid during the lifetime of the
  *        LockGuard.
  */
-template<typename LockType_t>
+template<typename LockType>
 class LockGuard
 {
 public:
@@ -39,7 +39,7 @@ public:
      *
      * @param[in] lock   Lock that should be aquired.
      */
-    LockGuard(LockType_t& lock)
+    LockGuard(LockType& lock)
         : lock_(lock)
     {
         lock_.lock();
@@ -48,12 +48,13 @@ public:
     /**
      * @brief Destructor. Releases the previously aquired lock.
      */
-    ~LockGuard() {
+    ~LockGuard()
+    {
         lock_.unlock();
     }
 
 private:
-    LockType_t& lock_; /**< Reference to the lock_guards lock */
+    LockType& lock_; /**< Reference to the lock_guards lock */
 
     // Deleted with purpose
     LockGuard(const LockGuard& other) = delete;

@@ -37,14 +37,9 @@ public:
     /**
      * @brief Default Constructor.
      */
-    Mutex() {
+    Mutex()
+    {
         this->mutex_ = MUTEX_INIT;
-    }
-
-    /**
-     * @brief Destructor.
-     */
-    ~Mutex() {
     }
 
     /**
@@ -52,9 +47,10 @@ public:
      *
      * @return 0   if the mutex is currently locked.
      * @return 1   if the mutex was unlocked. The mutex is now
-                   locked by the calling thread.
+     *             locked by the calling thread.
      */
-    auto tryLock() -> int {
+    auto tryLock() -> int
+    {
         return mutex_trylock(&(this->mutex_));
     }
 
@@ -63,21 +59,24 @@ public:
      *
      * @note Blocks until the mutex is successfully aquired.
      */
-    auto lock() -> void {
+    auto lock() -> void
+    {
         mutex_lock(&(this->mutex_));
     }
 
     /**
      * @brief Unlocks the Mutex.
      */
-    auto unlock() -> void {
+    auto unlock() -> void
+    {
         mutex_unlock(&(this->mutex_));
     }
 
     /**
      * @brief Unlocks the Mutex and suspends the calling thread afterwards.
      */
-    auto unlockAndSleep() -> void {
+    auto unlockAndSleep() -> void
+    {
         mutex_unlock_and_sleep(&(this->mutex_));
     }
 
