@@ -1,6 +1,7 @@
 # name of your application
 APPLICATION = riot-cpp-wrapper
 BOARD ?= native
+
 CXX = clang++
 CPPMIX = 1
 
@@ -8,6 +9,7 @@ FEATURES_REQUIRED += cpp
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../RIOT
+
 
 # Set Flags Compiler Flags
 FLAG_1 = -fno-exceptions

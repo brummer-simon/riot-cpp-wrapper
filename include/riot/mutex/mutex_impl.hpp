@@ -31,6 +31,7 @@ namespace riot
  *        locked and unlocked manually, for an automated lock and
  *        unlock mechanism see lock_guard.
  */
+
 class Mutex
 {
 public:
