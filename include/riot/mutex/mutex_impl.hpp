@@ -31,19 +31,16 @@ namespace riot
  *        locked and unlocked manually, for an automated lock and
  *        unlock mechanism see lock_guard.
  */
-class mutex {
+
+class Mutex
+{
 public:
     /**
      * @brief Default Constructor.
      */
-    mutex() {
-        mtx = MUTEX_INIT;
-    }
-
-    /**
-     * @brief Destructor.
-     */
-    ~mutex() {
+    Mutex()
+    {
+        this->mutex_ = MUTEX_INIT;
     }
 
     /**
@@ -51,10 +48,11 @@ public:
      *
      * @return 0   if the mutex is currently locked.
      * @return 1   if the mutex was unlocked. The mutex is now
-                   locked by the calling thread.
+     *             locked by the calling thread.
      */
-    auto try_lock() -> int {
-        return mutex_trylock(&(this->mtx));
+    auto tryLock() -> int
+    {
+        return mutex_trylock(&(this->mutex_));
     }
 
     /**
@@ -62,32 +60,35 @@ public:
      *
      * @note Blocks until the mutex is successfully aquired.
      */
-    auto lock() -> void {
-        mutex_lock(&(this->mtx));
+    auto lock() -> void
+    {
+        mutex_lock(&(this->mutex_));
     }
 
     /**
      * @brief Unlocks the Mutex.
      */
-    auto unlock() -> void {
-        mutex_unlock(&(this->mtx));
+    auto unlock() -> void
+    {
+        mutex_unlock(&(this->mutex_));
     }
 
     /**
      * @brief Unlocks the Mutex and suspends the calling thread afterwards.
      */
-    auto unlock_and_sleep() -> void {
-        mutex_unlock_and_sleep(&(this->mtx));
+    auto unlockAndSleep() -> void
+    {
+        mutex_unlock_and_sleep(&(this->mutex_));
     }
 
 private:
-    mutex_t mtx; /**< RIOT-OS mutex_t structure to perform operations on */
+    mutex_t mutex_; /**< RIOT-OS mutex_t structure to perform operations on */
 
     // Deleted with purpose
-    mutex(const mutex& other) = delete;
-    mutex(const mutex&& other) = delete;
-    mutex& operator = (const mutex& other) = delete;
-    mutex& operator = (const mutex&& other) = delete;
+    Mutex(const Mutex& other) = delete;
+    Mutex(const Mutex&& other) = delete;
+    Mutex& operator = (const Mutex& other) = delete;
+    Mutex& operator = (const Mutex&& other) = delete;
 };
 
 } // namespace riot

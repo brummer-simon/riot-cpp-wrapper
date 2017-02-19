@@ -22,6 +22,6 @@
  */
 
 #include "mutex/mutex_impl.hpp"
-#include "mutex/lock_guard_impl.hpp"
+#include "mutex/lockguard_impl.hpp"
 
 #endif // MUTEX_HPP

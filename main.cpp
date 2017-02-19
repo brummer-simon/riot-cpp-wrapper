@@ -6,11 +6,11 @@
  * directory for more details.
  */
 
-#include <stdio.h>
-#include "riot/mutex.hpp"
+#include <cstdio>
+#include "test/tests.hpp"
 
 auto main(void) -> int
 {
-
+    runAllTests();
     return 0;
 }
