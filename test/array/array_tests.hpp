@@ -32,6 +32,24 @@ auto arrayTestConstructor(size_t& succeededTests, size_t& failedTests) -> void
         failedTests += 1;
         return;
     }
+    // Copy Constructor
+    riot::Array<int, 3> c(a);
+    if (c != a) {
+        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
+        printf(" Reason: (c != a)\n");
+        failedTests += 1;
+        return;
+    }
+
+    // Assignment Operator
+    c = b;
+    if (c != c) {
+        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
+        printf(" Reason: (c != c)\n");
+        failedTests += 1;
+        return;
+    }
+
     printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
