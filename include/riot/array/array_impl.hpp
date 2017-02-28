@@ -70,12 +70,34 @@ public:
      *        up size() elements from @p li into constructed array.
      * @param[in] li   Refernce to init list used for initialization.
      */
-    Array(const std::initializer_list<T>& li)
+    Array(const std::initializer_list<ValueType>& li)
     {
       SizeType size = (this->size() < li.size()) ? this->size() : li.size();
       for (SizeType i = 0; i < size; ++i) {
           this->array_[i] = *(li.begin() + i);
       }
+    }
+
+    /**
+     * @brief Copy-Constructor
+     * @param[in] other   Array to copy.
+     */
+    Array(const Array& other)
+    {
+        memcpy(this->array_, other.array_, sizeof(this->array_));
+    }
+
+    /**
+     * @brief Assignment operator.
+     * @param[in] other   Reference to object that should be assigned.
+     * @return            Reference to this object
+     */
+    auto operator = (const Array& other) -> Array&
+    {
+        if (this != &other) {
+            memcpy(this->array_, other.array_, sizeof(this->array_));
+        }
+        return *this;
     }
 
     /**
@@ -261,7 +283,7 @@ public:
      * @brief Swaps content with another array of same type and size.
      * @param[in,out] other   Array to swap elements with.
      */
-    auto swap(Array<ValueType, arraySize>& other) -> void
+    auto swap(Array& other) -> void
     {
         for (SizeType i = 0; i < this->size(); ++i) {
             ValueType tmp = array_[i];
