@@ -46,7 +46,6 @@ public:
 
     /**
      * @brief Fully specified Constructor.
-     *
      * @param[in] iterator   Iterator that should be reversed.
      */
     explicit BackwardIterator(ConstReference& iterator)
@@ -56,8 +55,7 @@ public:
 
     /**
      * @brief Move iterator to next element.
-     *
-     * @return Ref to iterator, pointing to next element.
+     * @returns   Ref to iterator, pointing to next element.
      */
     auto operator ++ () -> BackwardIterator&
     {
@@ -67,8 +65,7 @@ public:
 
     /**
      * @brief Move iterator to previous element.
-     *
-     * @return Ref to iterator, pointing to previous element.
+     * @returns   Ref to iterator, pointing to previous element.
      */
     auto operator -- () -> BackwardIterator&
     {
@@ -78,8 +75,7 @@ public:
 
     /**
      * @brief Dereference iterator.
-     *
-     * @return Ref to the object, the internal iterator is pointing to.
+     * @returns   Ref to the object, the internal iterator is pointing to.
      */
     auto operator * () const -> typename IteratorType::Reference
     {
@@ -88,8 +84,7 @@ public:
 
     /**
      * @brief Dereferences iterator.
-     *
-     * @return Pointer to Dereferenced object, the iterator is pointing to.
+     * @returns   Pointer to Dereferenced object, the iterator is pointing to.
      */
     auto operator -> () const -> typename IteratorType::Pointer
     {
@@ -105,11 +100,9 @@ private:
 
 /**
  * @brief equal comparrison operator on Reverseiterators.
- *
  * @param[in] lhs   Leftside of the operator.
  * @param[in] rhs   Rightside of the operator.
- *
- * @return true if the memberiterators are equal.
+ * @returns         true if the memberiterators are equal.
  */
 template <typename IteratorType>
 auto operator == (const BackwardIterator<IteratorType>& lhs,
@@ -120,11 +113,9 @@ auto operator == (const BackwardIterator<IteratorType>& lhs,
 
 /**
  * @brief not equal comparrison operator on Reverseiterators.
- *
  * @param[in] lhs   Leftside of the operator.
  * @param[in] rhs   Rightside of the operator.
- *
- * @return true if the reverseiterators are not equal.
+ * @returns         true if the reverseiterators are not equal.
  */
 template <typename IteratorType>
 auto operator != (const BackwardIterator<IteratorType>& lhs,

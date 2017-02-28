@@ -35,11 +35,11 @@ auto lockGuardTest(size_t& succeededTests, size_t& failedTests) -> void
     // Check result
     if (l.cnt != 2) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: l.cnt != 2\n\n");
+        printf(" Reason: l.cnt != 2\n");
         failedTests += 1;
         return;
     }
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 

@@ -21,7 +21,7 @@ auto lockInterfaceTestLockDummy(size_t& succeededTests, size_t& failedTests) -> 
     riot::keepout::LockDummy l;
     riot::LockGuard<riot::keepout::LockDummy> g(l);
 
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 
@@ -34,7 +34,7 @@ auto lockInterfaceTestMutex(size_t& succeededTests, size_t& failedTests) -> void
     riot::Mutex l;
     riot::LockGuard<riot::Mutex> g(l);
 
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 

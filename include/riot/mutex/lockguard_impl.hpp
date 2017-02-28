@@ -36,7 +36,6 @@ class LockGuard
 public:
     /**
      * @brief Constructor. Trys to aquire given lock.
-     *
      * @param[in] lock   Lock that should be aquired.
      */
     LockGuard(LockType& lock)

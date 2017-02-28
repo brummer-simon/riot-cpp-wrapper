@@ -45,10 +45,9 @@ public:
 
     /**
      * @brief Trys to aquired the lock.
-     *
-     * @return 0   if the mutex is currently locked.
-     * @return 1   if the mutex was unlocked. The mutex is now
-     *             locked by the calling thread.
+     * @returns   Zero if the mutex is currently locked.
+     *            One if the mutex was unlocked. The mutex is now
+     *            locked by the calling thread.
      */
     auto tryLock() -> int
     {
@@ -57,7 +56,6 @@ public:
 
     /**
      * @brief Locks the Mutex.
-     *
      * @note Blocks until the mutex is successfully aquired.
      */
     auto lock() -> void

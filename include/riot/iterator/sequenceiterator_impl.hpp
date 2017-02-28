@@ -46,7 +46,6 @@ public:
 
     /**
      * @brief Fully-specified Constructor.
-     *
      * @param[in] ptr   Pointer type to iterator over.
      */
     explicit SequenceIterator(Pointer ptr)
@@ -56,8 +55,7 @@ public:
 
     /**
      * @brief Move iterator to next element.
-     *
-     * @return Ref to iterator, pointing to next element.
+     * @returns   Ref to iterator, pointing to next element.
      */
     auto operator ++ () -> SequenceIterator&
     {
@@ -67,8 +65,7 @@ public:
 
     /**
      * @brief Move iterator to previous element.
-     *
-     * @return Ref to iterator, pointing to previous element.
+     * @returns   Ref to iterator, pointing to previous element.
      */
     auto operator -- () -> SequenceIterator&
     {
@@ -78,8 +75,7 @@ public:
 
     /**
      * @brief Dereference iterator.
-     *
-     * @return Ref to the object, the iterator is pointing to.
+     * @returns   Ref to the object, the iterator is pointing to.
      */
     auto operator * () const -> Reference
     {
@@ -88,8 +84,7 @@ public:
 
     /**
      * @brief Dereferences iterator.
-     *
-     * @return Pointer to dereferenced object, the iterator is pointing to.
+     * @returns   Pointer to dereferenced object, the iterator is pointing to.
      */
     auto operator -> () const -> Pointer
     {
@@ -105,11 +100,9 @@ private:
 
 /**
  * @brief equal comparrison operator on SequenceIterators.
- *
  * @param[in] lhs   Leftside of the operator.
  * @param[in] rhs   Rightside of the operator.
- *
- * @return true if the Iterators pointing to the same location.
+ * @returns         true if the Iterators pointing to the same location.
  */
 template <typename T>
 auto operator == (const SequenceIterator<T>& lhs,
@@ -120,11 +113,9 @@ auto operator == (const SequenceIterator<T>& lhs,
 
 /**
  * @brief not equal comparrison operator on SequenceIterators.
- *
  * @param[in] lhs   Leftside of the operator.
  * @param[in] rhs   Rightside of the operator.
- *
- * @return true if the Iterators pointing to different locations.
+ * @returns         true if the Iterators pointing to different locations.
  */
 template <typename T>
 auto operator != (const SequenceIterator<T>& lhs,

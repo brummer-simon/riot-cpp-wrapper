@@ -21,7 +21,7 @@ auto iteratorInterfaceTestSequenceIterator(size_t& succeededTests, size_t& faile
     riot::SequenceIterator<int> sIt(testSet);
     riot::BackwardIterator<riot::SequenceIterator<int> > bIt(sIt);
 
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 

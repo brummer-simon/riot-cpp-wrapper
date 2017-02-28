@@ -20,7 +20,7 @@ auto arrayTestConstructor(size_t& succeededTests, size_t& failedTests) -> void
     riot::Array<int, 3> a(-23);
     if (a[0] != -23 || a[1] != -23 || a[2] != -23) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (a[0] != -23 || a[1] != -23 || a[2] != -23)\n\n");
+        printf(" Reason: (a[0] != -23 || a[1] != -23 || a[2] != -23)\n");
         failedTests += 1;
         return;
     }
@@ -28,11 +28,11 @@ auto arrayTestConstructor(size_t& succeededTests, size_t& failedTests) -> void
     riot::Array<int, 3> b = {23, 42, -1};
     if (b[0] != 23 || b[1] != 42 || b[2] != -1) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (b[0] != 23 || b[1] != 42 || b[2] != -1)\n\n");
+        printf(" Reason: (b[0] != 23 || b[1] != 42 || b[2] != -1)\n");
         failedTests += 1;
         return;
     }
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 
@@ -43,11 +43,11 @@ auto arrayTestAccess(size_t& succeededTests, size_t& failedTests) -> void
     riot::Array<int, 3> a = {23, 42, -1};
     if (a[0] != 23 || a[1] != 42 || a[2] != -1) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (a[0] != 23 || a[1] != 42 || a[2] != -1)\n\n");
+        printf(" Reason: (a[0] != 23 || a[1] != 42 || a[2] != -1)\n");
         failedTests += 1;
         return;
     }
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 
@@ -63,42 +63,42 @@ auto arrayTestAt(size_t& succeededTests, size_t& failedTests) -> void
     // Access existing element
     if (testArray.at(1, err) != 1) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (testArray.at(1, err) != 1)\n\n");
+        printf(" Reason: (testArray.at(1, err) != 1)\n");
         failedTests += 1;
         return;
     }
     if (err != 0) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (err != 0)\n\n");
+        printf(" Reason: (err != 0)\n");
         failedTests += 1;
         return;
     }
     // Access non-existing element
     if (testArray.at(3, err) != 0) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (testArray.at(3, err) != 0)\n\n");
+        printf(" Reason: (testArray.at(3, err) != 0)\n");
         failedTests += 1;
         return;
     }
     if (err != -EINVAL) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (err != -EINVAL)\n\n");
+        printf(" Reason: (err != -EINVAL)\n");
         failedTests += 1;
         return;
     }
     if (testArray.at(-1, err) != 0) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (testArray.at(3, err) != 0)\n\n");
+        printf(" Reason: (testArray.at(3, err) != 0)\n");
         failedTests += 1;
         return;
     }
     if (err != -EINVAL) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (err != -EINVAL)\n\n");
+        printf(" Reason: (err != -EINVAL)\n");
         failedTests += 1;
         return;
     }
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 
@@ -110,11 +110,11 @@ auto arrayTestData(size_t& succeededTests, size_t& failedTests) -> void
     int *pa = a.data();
     if (a[0] != pa[0] || a[1] != pa[1] || a[2] != pa[2]) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (a[0] != pa[0] || a[1] != pa[1] || a[2] != pa[2])\n\n");
+        printf(" Reason: (a[0] != pa[0] || a[1] != pa[1] || a[2] != pa[2])\n");
         failedTests += 1;
         return;
     }
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 
@@ -129,14 +129,14 @@ auto arrayTestIterators(size_t& succeededTests, size_t& failedTests) -> void
     riot::Array<int, 2>::Iterator it = a.begin();
     if (*it != 23 || *(++it) != 42 || ++it != a.end()) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*it != 23 || *(++it) != 42 || ++it != b.end())\n\n");
+        printf(" Reason: (*it != 23 || *(++it) != 42 || ++it != b.end())\n");
         failedTests += 1;
         return;
     }
     it = a.end();
     if (*(--it) != 42 || *(--it) != 23 || it != a.begin()) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*(--it) != 42 || *(--it) != 23 || it != a.begin())\n\n");
+        printf(" Reason: (*(--it) != 42 || *(--it) != 23 || it != a.begin())\n");
         failedTests += 1;
         return;
     }
@@ -144,18 +144,18 @@ auto arrayTestIterators(size_t& succeededTests, size_t& failedTests) -> void
     riot::Array<int, 2>::ReverseIterator rit = a.rbegin();
     if (*rit != 42 || *(++rit) != 23 || ++rit != a.rend()) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*rit != 42 || *(++rit) != 23 || ++rit != a.rend())\n\n");
+        printf(" Reason: (*rit != 42 || *(++rit) != 23 || ++rit != a.rend())\n");
         failedTests += 1;
         return;
     }
     rit = a.rend();
     if (*(--rit) != 23 || *(--rit) != 42 || rit != a.rbegin()) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*(--rit) != 23 || *(--rit) != 42 || rit != a.rbegin())\n\n");
+        printf(" Reason: (*(--rit) != 23 || *(--rit) != 42 || rit != a.rbegin())\n");
         failedTests += 1;
         return;
     }
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 
@@ -167,11 +167,11 @@ auto arrayTestSize(size_t& succeededTests, size_t& failedTests) -> void
     riot::Array<int, 3> a = {23, 42, -1};
     if (a.size() != 3) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (a.size() != 3)\n\n");
+        printf(" Reason: (a.size() != 3)\n");
         failedTests += 1;
         return;
     }
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 
@@ -183,11 +183,11 @@ auto arrayTestFill(size_t& succeededTests, size_t& failedTests) -> void
     a.fill(0);
     if (a[0] != 0 || a[1] != 0 || a[2] != 0) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (a[0] != 0 || a[1] != 0 || a[2] != 0)\n\n");
+        printf(" Reason: (a[0] != 0 || a[1] != 0 || a[2] != 0)\n");
         failedTests += 1;
         return;
     }
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 
@@ -200,17 +200,17 @@ auto arrayTestSwap(size_t& succeededTests, size_t& failedTests) -> void
     a.swap(b);
     if (a[0] != 4 || a[1] != 5 || a[2] != 6) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (a[0] != 4 || a[1] != 5 || a[2] != 6)\n\n");
+        printf(" Reason: (a[0] != 4 || a[1] != 5 || a[2] != 6)\n");
         failedTests += 1;
         return;
     }
     if (b[0] != 1 || b[1] != 2 || b[2] != 3) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (b[0] != 1 || b[1] != 2 || b[2] != 3)\n\n");
+        printf(" Reason: (b[0] != 1 || b[1] != 2 || b[2] != 3)\n");
         failedTests += 1;
         return;
     }
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 
@@ -224,17 +224,17 @@ auto arrayTestEqual(size_t& succeededTests, size_t& failedTests) -> void
     riot::Array<int, 3> c = {23, 42, 0};
     if (!(a == b)) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (!(a == b))\n\n");
+        printf(" Reason: (!(a == b))\n");
         failedTests += 1;
         return;
     }
     if (a == c) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (a == c)\n\n");
+        printf(" Reason: (a == c)\n");
         failedTests += 1;
         return;
     }
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 
@@ -248,17 +248,17 @@ auto arrayTestNonEqual(size_t& succeededTests, size_t& failedTests) -> void
     riot::Array<int, 3> c = {23, 42, -1};
     if (!(a != b)) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (!(a != b))\n\n");
+        printf(" Reason: (!(a != b))\n");
         failedTests += 1;
         return;
     }
     if (a != c) {
         printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (a != c)\n\n");
+        printf(" Reason: (a != c)\n");
         failedTests += 1;
         return;
     }
-    printf("Test '%s' succeeded.\n\n", __PRETTY_FUNCTION__);
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
 

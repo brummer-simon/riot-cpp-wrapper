@@ -58,7 +58,6 @@ public:
 
     /**
      * @brief Constructor: Initialize every Array element with @p initValue.
-     *
      * @param[in] initValue   Ref to the value used for initialization.
      */
     Array(ConstReference initValue)
@@ -69,7 +68,6 @@ public:
     /**
      * @brief Constructor: Initialize Array with initializer_list. Copies
      *        up size() elements from @p li into constructed array.
-     *
      * @param[in] li   Refernce to init list used for initialization.
      */
     Array(const std::initializer_list<T>& li)
@@ -82,12 +80,9 @@ public:
 
     /**
      * @brief Operator [], mutable access to a arrays element.
-     *
      * @note Like a normal c array, [] performs no boundry checks.
-     *
      * @param[in] pos   Index to the referenced element.
-     *
-     * @return Reference to the @p pos-th element.
+     * @returns         Reference to the @p pos-th element.
      */
     auto operator [] (SizeType pos) -> Reference
     {
@@ -96,12 +91,9 @@ public:
 
     /**
      * @brief Operator [], unmutable access to a arrays element.
-     *
      * @note Like a normal c array, [] performs no boundry checks.
-     *
      * @param[in] pos   Index to the referenced element.
-     *
-     * @return Const reference to the @p pos-th element.
+     * @returns         Const reference to the @p pos-th element.
      */
     auto operator [] (SizeType pos) const -> ConstReference
     {
@@ -110,14 +102,12 @@ public:
 
     /**
      * @brief Mutable element access with boundry check.
-     *
      * @param[in] pos    Index to the referenced element.
      * @param[out] err   Error field. Zero if @pos was withing boundries.
      *                   -EINVAL if not.
-     *
-     * @return Reference to the @p pos-th element, if @p pos was
-     *         within boundries. If not, a reference to the first element
-     *         is returned.
+     * @returns          Reference to the @p pos-th element, if @p pos was
+     *                   within boundries. If not, a reference to the
+     *                   first element is returned.
      */
     auto at(SizeType pos, int& err) -> Reference
     {
@@ -131,14 +121,12 @@ public:
 
     /**
      * @brief Unmutable element access with boundry check.
-     *
      * @param[in] pos    Index to the referenced element.
      * @param[out] err   Error field. Zero if @pos was withing boundries.
      *                   -EINVAL if not.
-     *
-     * @return Const reference to the @p pos-th element, if @p pos was
-     *         within boundries. If not, a const reference to the first element
-     *         is returned.
+     * @returns          Const reference to the @p pos-th element, if @p pos
+     *                   was within boundries. If not, a const reference to
+     *                   the first element is returned.
      */
     auto at(SizeType pos, int& err) const -> ConstReference
     {
@@ -152,8 +140,7 @@ public:
 
     /**
      * @brief Get mutable pointer to the underlaying c-array.
-     *
-     * @return pointer to the wrapped c-array.
+     * @returns   pointer to the wrapped c-array.
      */
     auto data() -> Pointer
     {
@@ -162,8 +149,7 @@ public:
 
     /**
      * @brief Get unmutable pointer to the underlaying c-array.
-     *
-     * @return const pointer to the wrapped c-array.
+     * @returns   const pointer to the wrapped c-array.
      */
     auto data() const -> ConstPointer
     {
@@ -173,8 +159,7 @@ public:
     /**
      * @brief Returns a forward iterator pointing to the first element
      *        in the array container.
-     *
-     * @return Iterator to [0].
+     * @returns   Iterator to [0].
      */
     auto begin() -> Iterator
     {
@@ -184,8 +169,7 @@ public:
     /**
      * @brief Returns a forward iterator pointing to the past-the-end element
      *        in the array container. Do not dereference.
-     *
-     * @return Iterator to [size()].
+     * @returns   Iterator to [size()].
      */
     auto end() -> Iterator
     {
@@ -195,8 +179,7 @@ public:
     /**
      * @brief Returns a reverse iterator pointing to the last element
      *        in the array container.
-     *
-     * @return Iterator to [size() - 1].
+     * @returns   Iterator to [size() - 1].
      */
     auto rbegin() -> ReverseIterator
     {
@@ -206,8 +189,7 @@ public:
     /**
      * @brief Returns a reverse iterator pointing to the past-the-first element
      *        in the array container. Do not dereference.
-     *
-     * @return Iterator to [-1].
+     * @returns   Iterator to [-1].
      */
     auto rend() -> ReverseIterator
     {
@@ -217,8 +199,7 @@ public:
     /**
      * @brief Returns a const forward iterator pointing to the first element
      *        in the array container.
-     *
-     * @return Const iterator to [0].
+     * @returns   Const iterator to [0].
      */
     auto cbegin() const -> ConstIterator
     {
@@ -228,8 +209,7 @@ public:
     /**
      * @brief Returns a const forward iterator pointing to the past-the-end
      *        element in the array container. Do not dereference.
-     *
-     * @return Const iterator to [size()].
+     * @returns   Const iterator to [size()].
      */
     auto cend() const -> ConstIterator
     {
@@ -239,8 +219,7 @@ public:
     /**
      * @brief Returns a const reverse iterator pointing to the last element
      *        in the array container.
-     *
-     * @return Const iterator to [size() - 1].
+     * @returns   Const iterator to [size() - 1].
      */
     auto crbegin() const -> ConstReverseIterator
     {
@@ -250,8 +229,7 @@ public:
     /**
      * @brief Returns a const reverse iterator pointing to the past-the-first
      *        element in the array container. Do not dereference.
-     *
-     * @return Const iterator to [-1].
+     * @returns   Const iterator to [-1].
      */
     auto crend() const -> ConstReverseIterator
     {
@@ -261,8 +239,7 @@ public:
    /**
     * @brief Returns the number of elements in the array container.
     *        Always the value of the second template parameter.
-    *
-    * @return Array size.
+    * @returns   Array size.
     */
     auto size() const -> SizeType
     {
@@ -271,7 +248,6 @@ public:
 
     /**
      * @brief Sets val as the value for all the elements in the array object.
-     *
      * @param[in] val   Reference to the new value for all elements.
      */
     auto fill(ConstReference val) -> void
@@ -283,7 +259,6 @@ public:
 
     /**
      * @brief Swaps content with another array of same type and size.
-     *
      * @param[in,out] other   Array to swap elements with.
      */
     auto swap(Array<ValueType, arraySize>& other) -> void
@@ -301,11 +276,9 @@ public:
 
 /**
  * @brief == operator on arrays of the same type and length.
- *
  * @param[in] lhs   Leftside of the operator.
  * @param[in] rhs   Rightside of the operator.
- *
- * @return true if lhs and rhs internal arrays contain equal bytes.
+ * @returns         true if lhs and rhs internal arrays contain equal bytes.
  */
 template <typename T, std::size_t arraySize>
 auto operator == (const Array<T, arraySize>& lhs,
@@ -319,11 +292,9 @@ auto operator == (const Array<T, arraySize>& lhs,
 
 /**
  * @brief != operator on arrays of the same type and length.
- *
  * @param[in] lhs   Leftside of the operator.
  * @param[in] rhs   Rightside of the operator.
- *
- * @return true if lhs and rhs internal arrays contents differ.
+ * @returns         true if lhs and rhs internal arrays contents differ.
  */
 template <typename T, std::size_t arraySize>
 auto operator != (const Array<T, arraySize>& lhs,
