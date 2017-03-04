@@ -29,14 +29,14 @@ auto backwardIteratorTestEqualityFunction(size_t& succeededTests, size_t& failed
     riot::BackwardIterator<riot::SequenceIterator<int> > it1(sIt1);
     riot::BackwardIterator<riot::SequenceIterator<int> > it2(sIt2);
     if (!(it1 == it2)) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (it1 != it2)\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (it1 != it2)\n");
         failedTests += 1;
         return;
     }
     if (!(it2 == it1)) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (it2 != it1)\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (it2 != it1)\n");
         failedTests += 1;
         return;
     }
@@ -54,14 +54,14 @@ auto backwardIteratorTestNotEqualityFunction(size_t& succeededTests, size_t& fai
     riot::BackwardIterator<riot::SequenceIterator<int> > it1(sIt1);
     riot::BackwardIterator<riot::SequenceIterator<int> > it2(sIt2);
     if (!(it1 != it2)) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (it1 == it2)\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (it1 == it2)\n");
         failedTests += 1;
         return;
     }
     if (!(it2 != it1)) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (it2 == it1)\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (it2 == it1)\n");
         failedTests += 1;
         return;
     }
@@ -81,20 +81,20 @@ auto backwardIteratorTestDereference(size_t& succeededTests, size_t& failedTests
     riot::BackwardIterator<riot::SequenceIterator<int> > it2(sIt2);
     riot::BackwardIterator<riot::SequenceIterator<int> > it3(sIt3);
     if (*it1 != testSet[0]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*it1 != testSet[0])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*it1 != testSet[0])\n");
         failedTests += 1;
         return;
     }
     if (*it2 != testSet[1]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*it2 != testSet[1])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*it2 != testSet[1])\n");
         failedTests += 1;
         return;
     }
     if (*it3 != testSet[2]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*it3 != testSet[2])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*it3 != testSet[2])\n");
         failedTests += 1;
         return;
     }
@@ -111,8 +111,8 @@ auto backwardIteratorTestDereferencePointer(size_t& succeededTests, size_t& fail
     riot::BackwardIterator<riot::SequenceIterator<TestBackwardIteratorObj> > it(sIt);
     it->increase();
     if (obj.cnt != 1) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (obj.cnt != 1)\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (obj.cnt != 1)\n");
         failedTests += 1;
         return;
     }
@@ -128,14 +128,14 @@ auto backwardIteratorTestPrefixIncrease(size_t& succeededTests, size_t& failedTe
     riot::SequenceIterator<int> sIt(testSet + 2);
     riot::BackwardIterator<riot::SequenceIterator<int> > it(sIt);
     if (*(++it) != testSet[1]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*(++it1) != testSet[1])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*(++it1) != testSet[1])\n");
         failedTests += 1;
         return;
     }
     if (*(++it) != testSet[0]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*(++it1) != testSet[0])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*(++it1) != testSet[0])\n");
         failedTests += 1;
         return;
     }
@@ -151,14 +151,14 @@ auto backwardIteratorTestPrefixDecrease(size_t& succeededTests, size_t& failedTe
     riot::SequenceIterator<int> sIt(testSet);
     riot::BackwardIterator<riot::SequenceIterator<int> > it(sIt);
     if (*(--it) != testSet[1]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*(--it1) != testSet[1])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*(--it1) != testSet[1])\n");
         failedTests += 1;
         return;
     }
     if (*(--it) != testSet[2]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*(--it1) != testSet[2])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*(--it1) != testSet[2])\n");
         failedTests += 1;
         return;
     }

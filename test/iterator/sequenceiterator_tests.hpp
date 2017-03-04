@@ -26,14 +26,14 @@ auto sequenceIteratorTestEqualityFunction(size_t& succeededTests, size_t& failed
     riot::SequenceIterator<int> it1(testSet);
     riot::SequenceIterator<int> it2(testSet);
     if (!(it1 == it2)) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (it1 != it2)\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (it1 != it2)\n");
         failedTests += 1;
         return;
     }
     if (!(it2 == it1)) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (it2 != it1)\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (it2 != it1)\n");
         failedTests += 1;
         return;
     }
@@ -49,14 +49,14 @@ auto sequenceIteratorTestNotEqualityFunction(size_t& succeededTests, size_t& fai
     riot::SequenceIterator<int> it1(testSet);
     riot::SequenceIterator<int> it2(testSet + 1);
     if (!(it1 != it2)) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (it1 == it2)\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (it1 == it2)\n");
         failedTests += 1;
         return;
     }
     if (!(it2 != it1)) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (it2 == it1)\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (it2 == it1)\n");
         failedTests += 1;
         return;
     }
@@ -73,20 +73,20 @@ auto sequenceIteratorTestDereference(size_t& succeededTests, size_t& failedTests
     riot::SequenceIterator<int> it2(testSet + 1);
     riot::SequenceIterator<int> it3(testSet + 2);
     if (*it1 != testSet[0]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*it1 != testSet[0])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*it1 != testSet[0])\n");
         failedTests += 1;
         return;
     }
     if (*it2 != testSet[1]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*it2 != testSet[1])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*it2 != testSet[1])\n");
         failedTests += 1;
         return;
     }
     if (*it3 != testSet[2]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*it3 != testSet[2])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*it3 != testSet[2])\n");
         failedTests += 1;
         return;
     }
@@ -102,8 +102,8 @@ auto sequenceIteratorTestDereferencePointer(size_t& succeededTests, size_t& fail
     riot::SequenceIterator<TestSequenceIteratorObj> it(&obj);
     it->increase();
     if (obj.cnt != 1) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (obj.cnt != 1)\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (obj.cnt != 1)\n");
         failedTests += 1;
         return;
     }
@@ -118,14 +118,14 @@ auto sequenceIteratorTestPrefixIncrease(size_t& succeededTests, size_t& failedTe
     int testSet[3] = {0, 1, 2};
     riot::SequenceIterator<int> it1(testSet);
     if (*(++it1) != testSet[1]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*(++it1) != testSet[1])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*(++it1) != testSet[1])\n");
         failedTests += 1;
         return;
     }
     if (*(++it1) != testSet[2]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*(++it1) != testSet[2])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*(++it1) != testSet[2])\n");
         failedTests += 1;
         return;
     }
@@ -140,14 +140,14 @@ auto sequenceIteratorTestPrefixDecrease(size_t& succeededTests, size_t& failedTe
     int testSet[3] = {0, 1, 2};
     riot::SequenceIterator<int> it1(testSet + 2);
     if (*(--it1) != testSet[1]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*(--it1) != testSet[1])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*(--it1) != testSet[1])\n");
         failedTests += 1;
         return;
     }
     if (*(--it1) != testSet[0]) {
-        printf("Test '%s' failed.", __PRETTY_FUNCTION__);
-        printf(" Reason: (*(--it1) != testSet[0])\n");
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (*(--it1) != testSet[0])\n");
         failedTests += 1;
         return;
     }
