@@ -31,25 +31,27 @@ namespace riot
 {
 
 // Forward declaration LockedRingbuffer
-template <typename T, typename Lock>
+template <typename T, std::size_t Size, typename Buffer, typename Lock>
 class LockedRingbuffer;
 
 // Forward declaration swap function (needs friend access)
-template <typename T, typename Lock>
-auto swap(LockedRingbuffer<T, Lock>& lhs, LockedRingbuffer<T, Lock>& rhs) -> void;
+template <typename T, std::size_t Size, typename Buffer, typename Lock>
+auto swap(LockedRingbuffer<T, Size, Buffer, Lock>& lhs,
+          LockedRingbuffer<T, Size, Buffer, Lock>& rhs) -> void;
 
 // Implementation LockedRingbuffer
-template <typename T, typename Lock = Mutex>
+template <typename T, std::size_t Size, typename Buffer = Ringbuffer<T, Size>,
+          typename Lock = Mutex>
 class LockedRingbuffer
 {
 public:
     // Use Membertypes of internal Ringbuffer
-    typedef typename T::ValueType ValueType;
-    typedef typename T::Reference Reference;
-    typedef typename T::Pointer Pointer;
-    typedef typename T::ConstReference ConstReference;
-    typedef typename T::ConstPointer ConstPointer;
-    typedef typename T::SizeType SizeType;
+    typedef T ValueType;
+    typedef T& Reference;
+    typedef T* Pointer;
+    typedef const T& ConstReference;
+    typedef const T* ConstPointer;
+    typedef std::size_t SizeType;
 
     /**
      * @brief Default Constructor: Creates empty LockedRingbuffer
@@ -63,7 +65,7 @@ public:
      * @see Documentation of supplied template T.
      */
     LockedRingbuffer(const std::initializer_list<ValueType>& li)
-        : buffer_(T(li))
+        : buffer_(Buffer(li))
     {
     }
 
@@ -91,7 +93,7 @@ public:
      * @param[in] buffer   Ref to Ringbuffer that contains the
      *                     elements, that should be copied.
      */
-    LockedRingbuffer(const T& buffer)
+    LockedRingbuffer(const Buffer& buffer)
         : buffer_(buffer)
     {
     }
@@ -242,15 +244,16 @@ public:
     }
 
 private:
-    T buffer_;
+    Buffer buffer_;
     mutable Lock lock_;
 
     // Friend Function needed to aquire internal locks ...
-    friend auto swap<T, Lock>(LockedRingbuffer& lhs, LockedRingbuffer& rhs) -> void;
+    friend auto swap<T, Size, Buffer, Lock>(LockedRingbuffer& lhs, LockedRingbuffer& rhs) -> void;
 };
 
-template <typename T, typename Lock>
-auto swap(LockedRingbuffer<T, Lock>& lhs, LockedRingbuffer<T, Lock>& rhs) -> void
+template <typename T, std::size_t Size, typename Buffer, typename Lock>
+auto swap(LockedRingbuffer<T, Size, Buffer, Lock>& lhs,
+          LockedRingbuffer<T, Size, Buffer, Lock>& rhs) -> void
 {
     riot::LockGuard<Lock> guardLhs(lhs.lock_);
     riot::LockGuard<Lock> guardRhs(rhs.lock_);
