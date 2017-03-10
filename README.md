@@ -9,3 +9,7 @@ The classes provide basic OOP abstractions for embedded Programming with RIOT-OS
 * Avoiding Exceptions (usage of return values instead)
 * Avoiding C++ standard library (exception c-headers)
 * No hidden memory allocations
+
+# Module Dependencies
+The following Classes need additional modules:
+* Semaphore (additional modules: sema)
