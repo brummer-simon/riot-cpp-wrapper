@@ -21,6 +21,7 @@
 #ifndef RINGBUFFER_IMPL_HPP
 #define RINGBUFFER_IMPL_HPP
 
+#include <initializer_list>
 #include <cstdint>
 #include <cerrno>
 #include "ringbuffer.h"
@@ -34,7 +35,7 @@ namespace riot
  *       This wrapper tries to avoid the pitfalls that come with
  *       memory operations on c++ objects.
  */
-template <typename T, std::size_t size>
+template <typename T, std::size_t Size>
 class Ringbuffer
 {
 public:
@@ -52,7 +53,47 @@ public:
     Ringbuffer()
     {
         ringbuffer_init(&(this->rbuf_), reinterpret_cast<char *>(this->mem_),
-                        sizeof(ValueType) * size);
+                        sizeof(ValueType) * Size);
+    }
+
+    /**
+     * @brief Constructor: Initialize Ringbuffer with initializer_list. Copies
+     *        up to 'size' elements from @p li into constructed array.
+     * @param[in] li   Reference to init list used for initialization.
+     */
+    Ringbuffer(const std::initializer_list<ValueType>& li)
+        : Ringbuffer()
+    {
+        SizeType n = (Size < li.size()) ? Size : li.size();
+        for (SizeType i = 0; i < n; ++i) {
+            this->putOne(*(li.begin() + i));
+        }
+    }
+
+    /**
+     * @brief Fill-Constructor: Fill Ringbuffer with given Element.
+     * @param[in] initValue   Reference to object the ringbuffer
+     *                        should be filled with.
+     */
+    Ringbuffer(ConstReference initValue)
+        : Ringbuffer(initValue, Size)
+    {
+    }
+
+    /**
+     * @brief Fill-Constructor: Fill Ringbuffer with up to @p n elements.
+     * @param[in] initValue   Refernce to object the ringbuffer
+     *                        should be filled with.
+     * @param[in] n           Maximum Number of Elements of @p initValue, that
+     *                        should be stored in Ringbuffer.
+     */
+    Ringbuffer(ConstReference initValue, const SizeType n)
+        : Ringbuffer()
+    {
+        SizeType size = (n < Size) ? n : Size;
+        for (SizeType i = 0; i < size; ++i) {
+            this->addTail_(initValue);
+        }
     }
 
     /**
@@ -62,7 +103,7 @@ public:
      */
     Ringbuffer(const Ringbuffer& other)
     {
-        for (SizeType i = 0; i < size; ++i) {
+        for (SizeType i = 0; i < Size; ++i) {
             this->mem_[i] = other.mem_[i];
         }
         this->rbuf_ = other.rbuf_;
@@ -71,15 +112,15 @@ public:
 
     /**
      * @brief Copy assignment operator.
-     * @param[in] other   Object to assign to this object.
+     * @param[in] rhs   Object to assign to this object.
      */
-    auto operator = (const Ringbuffer& other) -> Ringbuffer&
+    auto operator = (const Ringbuffer& rhs) -> Ringbuffer&
     {
-        if (this != &other) {
-            for (SizeType i = 0; i < size; ++i) {
-                this->mem_[i] = other.mem_[i];
+        if (this != &rhs) {
+            for (SizeType i = 0; i < Size; ++i) {
+                this->mem_[i] = rhs.mem_[i];
             }
-            this->rbuf_ = other.rbuf_;
+            this->rbuf_ = rhs.rbuf_;
             this->rbuf_.buf = reinterpret_cast<char *>(this->mem_);
         }
         return *this;
@@ -155,7 +196,7 @@ public:
      * @return           Zero if a element was assigned to @p dst.
      *                   -1 if the Ringbuffer is empty.
      */
-    auto peekOne(Reference dst) -> int
+    auto peekOne(Reference dst) const -> int
     {
         if (this->empty()) {
             return -1;
@@ -192,12 +233,12 @@ public:
      */
     auto get(ValueType dst[], SizeType n) -> SizeType
     {
-        SizeType avail = size - this->getFree();
+        SizeType avail = Size - this->getFree();
         if (n > avail) {
             n = avail;
         }
         for (SizeType i = 0; i < n; ++i) {
-            this->getOne(dst[i]);
+            this->getHead_(dst[i]);
         }
         return n;
     }
@@ -209,19 +250,28 @@ public:
      * @param[in] n      Maximum number of elements to store in @p dst.
      * @returns          Number of actualy peeked elements.
      */
-    auto peek(ValueType dst[], SizeType n) -> SizeType
+    auto peek(ValueType dst[], SizeType n) const -> SizeType
     {
-        ringbuffer_t cpy = this->rbuf_;
-        SizeType ret = this->get(dst, n);
-        this->rbuf_ = cpy;
-        return ret;
+        // Save Ringbuffer state
+        ringbuffer_t rbufOld = this->rbuf_;
+        // Perform peek-operation
+        SizeType avail = Size - this->getFree();
+        if (n > avail) {
+            n = avail;
+        }
+        for (SizeType i = 0; i < n; ++i) {
+            this->getHead_(dst[i]);
+        }
+        // Restore Ringbuffer state
+        this->rbuf_ = rbufOld;
+        return n;
     }
 
     /**
      * @brief Number of elements that fit currently into ringbuffer.
      * @returns   Free places in Ringbuffer.
      */
-    auto getFree() -> SizeType
+    auto getFree() const -> SizeType
     {
         return ringbuffer_get_free(&(this->rbuf_)) / sizeof(ValueType);
     }
@@ -261,25 +311,15 @@ public:
         return (ret / sizeof(ValueType));
     }
 
-    /**
-     * @brief Swaps content with another Ringbuffer of same type and size.
-     * @param[in,out] other   Ringbuffer to swap elements with.
-     */
-    auto swap(Ringbuffer& other) -> void
-    {
-        Ringbuffer tmp(other);
-        other = *this;
-        *this = tmp;
-    }
-
 private:
     /**
      * @brief Get oldest element from the ringbuffer.
      * @note Internal function, performs no boundry checks.
+     * @note constness added to ensure consitent API (peek() implementation)
      * @pre ValueType must be copy-assignable.
      * @param[out] dst   Reference to assign oldest element in ringbuffer to.
      */
-    auto getHead_(Reference dst) -> void
+    auto getHead_(Reference dst) const -> void
     {
         // Assign Object directly from current read position.
         // Hacky but avoids problems that come with memcpy.
@@ -315,9 +355,22 @@ private:
         *p = src;
     }
 
-    ValueType mem_[size];   /**< Memory used for the ringbuffer */
-    ringbuffer_t rbuf_;     /**< Wrapped ringbuffer struct */
+    ValueType mem_[Size];       /**< Memory used for the ringbuffer */
+    mutable ringbuffer_t rbuf_; /**< Wrapped ringbuffer struct */
 };
+
+/**
+ * @brief Swaps contents of two ringbuffers.
+ * @param[in,out] lhs   Ringbuffer (left hand side).
+ * @param[in,out] rhs   Ringbuffer (right hand side).
+ */
+template <typename T, std::size_t Size>
+auto swap(Ringbuffer<T, Size>& lhs, Ringbuffer<T, Size>& rhs) -> void
+{
+    Ringbuffer<T, Size> tmp(rhs);
+    rhs = lhs;
+    lhs = tmp;
+}
 
 } // namespace riot
 #endif // RINGBUFFER_IMPL_HPP

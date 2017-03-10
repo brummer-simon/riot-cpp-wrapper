@@ -13,6 +13,7 @@
 #include "iterator/iterator_tests.hpp"
 #include "array/array_tests.hpp"
 #include "ringbuffer/ringbuffer_tests.hpp"
+#include "ringbuffer/lockedringbuffer_tests.hpp"
 
 // Run all Tests.
 auto runAllTests() -> void
@@ -26,6 +27,7 @@ auto runAllTests() -> void
     runIteratorTests(succeededTests, failedTests);
     runArrayTests(succeededTests, failedTests);
     runRingbufferTests(succeededTests, failedTests);
+    runLockedRingbufferTests(succeededTests, failedTests);
 
     printf("\n--- Testrun finished ---\n\n");
     printf("Tests ran: %u\n", succeededTests + failedTests);

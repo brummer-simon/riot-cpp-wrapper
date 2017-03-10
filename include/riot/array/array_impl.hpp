@@ -33,7 +33,7 @@ namespace riot
 /**
  * @brief C++ wrapper for c-arrays. Heavily inspired by the std::array.
  */
-template <typename T, std::size_t arraySize>
+template <typename T, std::size_t Size>
 class Array
 {
 public:
@@ -67,15 +67,15 @@ public:
 
     /**
      * @brief Constructor: Initialize Array with initializer_list. Copies
-     *        up size() elements from @p li into constructed array.
-     * @param[in] li   Refernce to init list used for initialization.
+     *        up 'size' elements from @p li into constructed array.
+     * @param[in] li   Reference to init list used for initialization.
      */
     Array(const std::initializer_list<ValueType>& li)
     {
-      SizeType size = (this->size() < li.size()) ? this->size() : li.size();
-      for (SizeType i = 0; i < size; ++i) {
-          this->array_[i] = *(li.begin() + i);
-      }
+        SizeType n = (Size < li.size()) ? Size : li.size();
+        for (SizeType i = 0; i < n; ++i) {
+            this->array_[i] = *(li.begin() + i);
+        }
     }
 
     /**
@@ -85,7 +85,7 @@ public:
      */
     Array(const Array& other)
     {
-        for (SizeType i = 0; i < arraySize; ++i) {
+        for (SizeType i = 0; i < Size; ++i) {
             this->array_[i] = other.array_[i];
         }
     }
@@ -96,11 +96,11 @@ public:
      * @param[in] other   Reference to object that should be assigned.
      * @return            Reference to this object
      */
-    auto operator = (const Array& other) -> Array&
+    auto operator = (const Array& rhs) -> Array&
     {
-        if (this != &other) {
-            for (SizeType i = 0; i < arraySize; ++i) {
-                this->array_[i] = other.array_[i];
+        if (this != &rhs) {
+            for (SizeType i = 0; i < Size; ++i) {
+                this->array_[i] = rhs.array_[i];
             }
         }
         return *this;
@@ -139,7 +139,7 @@ public:
      */
     auto at(SizeType pos, int& err) -> Reference
     {
-        if (pos < arraySize) {
+        if (pos < Size) {
             err = 0;
             return this->array_[pos];
         }
@@ -158,7 +158,7 @@ public:
      */
     auto at(SizeType pos, int& err) const -> ConstReference
     {
-        if (pos < arraySize) {
+        if (pos < Size) {
             err = 0;
             return this->array_[pos];
         }
@@ -201,7 +201,7 @@ public:
      */
     auto end() -> Iterator
     {
-        return Iterator(this->array_ + arraySize);
+        return Iterator(this->array_ + Size);
     }
 
     /**
@@ -211,7 +211,7 @@ public:
      */
     auto rbegin() -> ReverseIterator
     {
-        return ReverseIterator(Iterator(this->array_ + arraySize - 1));
+        return ReverseIterator(Iterator(this->array_ + Size - 1));
     }
 
     /**
@@ -241,7 +241,7 @@ public:
      */
     auto cend() const -> ConstIterator
     {
-        return ConstIterator(this->array_ + arraySize);
+        return ConstIterator(this->array_ + Size);
     }
 
     /**
@@ -251,7 +251,7 @@ public:
      */
     auto crbegin() const -> ConstReverseIterator
     {
-        return ConstReverseIterator(ConstIterator(this->array_ + arraySize - 1));
+        return ConstReverseIterator(ConstIterator(this->array_ + Size - 1));
     }
 
     /**
@@ -271,7 +271,7 @@ public:
     */
     auto size() const -> SizeType
     {
-        return arraySize;
+        return Size;
     }
 
     /**
@@ -280,7 +280,7 @@ public:
      */
     auto fill(ConstReference val) -> void
     {
-        for (SizeType i = 0; i < arraySize; ++i) {
+        for (SizeType i = 0; i < Size; ++i) {
             array_[i] = val;
         }
     }
@@ -297,7 +297,7 @@ public:
     }
 
     private:
-        ValueType array_[arraySize];   /**< Internal c-array */
+        ValueType array_[Size];   /**< Internal c-array */
 };
 
 /**
@@ -307,14 +307,13 @@ public:
  * @param[in] rhs   Rightside of the operator.
  * @returns         true if lhs and rhs internal arrays contain equal bytes.
  */
-template <typename T, std::size_t arraySize>
-auto operator == (const Array<T, arraySize>& lhs,
-                  const Array<T, arraySize>& rhs) -> bool
+template <typename T, std::size_t Size>
+auto operator == (const Array<T, Size>& lhs, const Array<T, Size>& rhs) -> bool
 {
     if (&lhs == &rhs) {
         return true;
     }
-    for (std::size_t i = 0; i < arraySize; ++i) {
+    for (std::size_t i = 0; i < Size; ++i) {
         if (!(lhs[i] == rhs[i])) {
             return false;
         }
@@ -329,9 +328,8 @@ auto operator == (const Array<T, arraySize>& lhs,
  * @param[in] rhs   Rightside of the operator.
  * @returns         true if lhs and rhs internal arrays contents differ.
  */
-template <typename T, std::size_t arraySize>
-auto operator != (const Array<T, arraySize>& lhs,
-                  const Array<T, arraySize>& rhs) -> bool
+template <typename T, std::size_t Size>
+auto operator != (const Array<T, Size>& lhs, const Array<T, Size>& rhs) -> bool
 {
     return !(lhs == rhs);
 }

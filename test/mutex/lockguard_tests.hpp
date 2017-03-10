@@ -9,15 +9,8 @@
 #ifndef LOCKGUARD_TESTS_HPP
 #define LOCKGUARD_TESTS_HPP
 
-#include <riot/mutex.hpp>
-
-struct TestLock
-{
-    int cnt;
-    TestLock() : cnt(0) {}
-    void lock() { ++cnt;}
-    void unlock() { ++cnt;}
-};
+#include "riot/mutex.hpp"
+#include "../testlock.hpp"
 
 auto testFunc(TestLock& l)
 {
@@ -33,9 +26,9 @@ auto lockGuardTest(size_t& succeededTests, size_t& failedTests) -> void
     testFunc(l);
 
     // Check result
-    if (l.cnt != 2) {
+    if (l.timesLocked != 1 || l.timesUnlocked != 1) {
         printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
-        printf("!--- Reason: l.cnt != 2\n");
+        printf("!--- Reason: (l.timesLocked != 1 || l.timesUnlocked != 1)\n");
         failedTests += 1;
         return;
     }

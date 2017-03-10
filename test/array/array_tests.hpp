@@ -14,7 +14,7 @@
 // Test Constructors. Expected Behavior: The init constructor should initialize
 // all elements with a given value. The initializer list constructor assigns
 // every element of the init list to the array element at the same position.
-auto arrayTestConstructor(size_t& succeededTests, size_t& failedTests) -> void
+auto arrayTestInitConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Init constructor
     riot::Array<int, 3> a(-23);
@@ -24,32 +24,51 @@ auto arrayTestConstructor(size_t& succeededTests, size_t& failedTests) -> void
         failedTests += 1;
         return;
     }
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
+    succeededTests += 1;
+}
+
+auto arrayTestInitializerListConstructor(size_t& succeededTests, size_t& failedTests) -> void
+{
     // initializer_list
-    riot::Array<int, 3> b = {23, 42, -1};
-    if (b[0] != 23 || b[1] != 42 || b[2] != -1) {
+    riot::Array<int, 3> a = {23, 42, -1};
+    if (a[0] != 23 || a[1] != 42 || a[2] != -1) {
         printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
-        printf("!--- Reason: (b[0] != 23 || b[1] != 42 || b[2] != -1)\n");
+        printf("!--- Reason: (a[0] != 23 || a[1] != 42 || a[2] != -1)\n");
         failedTests += 1;
         return;
     }
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
+    succeededTests += 1;
+}
+
+auto arrayTestCopyConstructor(size_t& succeededTests, size_t& failedTests) -> void
+{
     // Copy Constructor
-    riot::Array<int, 3> c(a);
-    if (c != a) {
+    riot::Array<int, 3> a(-23);
+    riot::Array<int, 3> b(a);
+    if (b != a) {
         printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
-        printf("!--- Reason: (c != a)\n");
+        printf("!--- Reason: (b != a)\n");
         failedTests += 1;
         return;
     }
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
+    succeededTests += 1;
+}
 
+auto arrayTestAssignmentOperator(size_t& succeededTests, size_t& failedTests) -> void
+{
     // Assignment Operator
-    c = b;
-    if (c != c) {
+    riot::Array<int, 3> a(-23);
+    riot::Array<int, 3> b;
+    b = a;
+    if (b != a) {
         printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
-        printf("!--- Reason: (c != c)\n");
+        printf("!--- Reason: (b != a)\n");
         failedTests += 1;
         return;
     }
-
     printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
     succeededTests += 1;
 }
@@ -283,7 +302,10 @@ auto arrayTestNonEqual(size_t& succeededTests, size_t& failedTests) -> void
 // Run all Array Tests
 auto runArrayTests(size_t& succeededTests, size_t& failedTests) -> void
 {
-    arrayTestConstructor(succeededTests, failedTests);
+    arrayTestInitConstructor(succeededTests, failedTests);
+    arrayTestInitializerListConstructor(succeededTests, failedTests);
+    arrayTestCopyConstructor(succeededTests, failedTests);
+    arrayTestAssignmentOperator(succeededTests, failedTests);
     arrayTestAccess(succeededTests, failedTests);
     arrayTestAt(succeededTests, failedTests);
     arrayTestData(succeededTests, failedTests);
