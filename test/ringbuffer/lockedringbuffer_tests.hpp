@@ -6,17 +6,18 @@
  * directory for more details.
  */
 
-#ifndef RINGBUFFER_TESTS_HPP
-#define RINGBUFFER_TESTS_HPP
+#ifndef LOCKEDRINGBUFFER_TESTS_HPP
+#define LOCKEDRINGBUFFER_TESTS_HPP
 
 #include "../testobj.hpp"
+#include "../testlock.hpp"
 #include "riot/ringbuffer.hpp"
 
 // Test Constructors: They should behave as Expected.
-auto ringbufferTestDefaultConstructor(size_t& succeededTests, size_t& failedTests) -> void
+auto lockedRingbufferTestDefaultConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Default Constructor
-    riot::Ringbuffer<TestObj, 1> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> rbuf;
     rbuf.addOne(TestObj(1,2,3));
     TestObj ret;
     rbuf.getOne(ret);
@@ -29,10 +30,10 @@ auto ringbufferTestDefaultConstructor(size_t& succeededTests, size_t& failedTest
     succeededTests += 1;
 }
 
-auto ringbufferTestInitializerListConstructor(size_t& succeededTests, size_t& failedTests) -> void
+auto lockedRingbufferTestInitializerListConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Initializer list Constructor
-    riot::Ringbuffer<TestObj, 2> rbuf = {TestObj(1,2,3), TestObj(4,5,6)};
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 2>> rbuf = {TestObj(1,2,3), TestObj(4,5,6)};
     TestObj ret1;
     TestObj ret2;
     rbuf.getOne(ret1);
@@ -46,10 +47,10 @@ auto ringbufferTestInitializerListConstructor(size_t& succeededTests, size_t& fa
     succeededTests += 1;
 }
 
-auto ringbufferTestFillConstructor(size_t& succeededTests, size_t& failedTests) -> void
+auto lockedRingbufferTestFillConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Fill-Constructor
-    riot::Ringbuffer<TestObj, 2> rbuf1(TestObj(1,2,3), 1);
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 2>> rbuf1(TestObj(1,2,3), 1);
     TestObj ret1;
     TestObj ret2;
     rbuf1.getOne(ret1);
@@ -59,7 +60,7 @@ auto ringbufferTestFillConstructor(size_t& succeededTests, size_t& failedTests) 
         printf("!--- Reason: (ret1 != ret2)\n");
         failedTests += 1;
     }
-    riot::Ringbuffer<TestObj, 2> rbuf2(TestObj(1,2,3));
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 2>> rbuf2(TestObj(1,2,3));
     rbuf2.getOne(ret1);
     rbuf2.getOne(ret2);
     if (ret1 != ret2) {
@@ -71,11 +72,29 @@ auto ringbufferTestFillConstructor(size_t& succeededTests, size_t& failedTests) 
     succeededTests += 1;
 }
 
-auto ringbufferTestCopyConstructor(size_t& succeededTests, size_t& failedTests) -> void
+auto lockedRingbufferTestCopyRingbufferConstructor(size_t& succeededTests, size_t& failedTests) -> void
+{
+    // Copy Ringbuffer-Constructor
+    riot::Ringbuffer<TestObj, 1> rbuf(TestObj(1,2,3));
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> lrbuf(rbuf);
+    TestObj ret1;
+    TestObj ret2;
+    rbuf.getOne(ret1);
+    lrbuf.getOne(ret2);
+    if (ret1 != ret2) {
+        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
+        printf("!--- Reason: (ret1 != ret2)\n");
+        failedTests += 1;
+    }
+    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
+    succeededTests += 1;
+}
+
+auto lockedRingbufferTestCopyConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Copy-Constructor
-    riot::Ringbuffer<TestObj, 1> rbuf1 (TestObj(1,2,3));
-    riot::Ringbuffer<TestObj, 1> rbuf2(rbuf1);
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> rbuf1 (TestObj(1,2,3));
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> rbuf2(rbuf1);
     TestObj ret;
     rbuf2.getOne(ret);
     if (ret != TestObj(1,2,3)) {
@@ -87,11 +106,11 @@ auto ringbufferTestCopyConstructor(size_t& succeededTests, size_t& failedTests) 
     succeededTests += 1;
 }
 
-auto ringbufferTestAssignmentOperator(size_t& succeededTests, size_t& failedTests) -> void
+auto lockedRingbufferTestAssignmentOperator(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Assignment Operator
-    riot::Ringbuffer<TestObj, 1> rbuf1 (TestObj(1,2,3));
-    riot::Ringbuffer<TestObj, 1> rbuf2;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> rbuf1 (TestObj(1,2,3));
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> rbuf2;
     rbuf2 = rbuf1;
     TestObj ret;
     rbuf2.getOne(ret);
@@ -104,14 +123,11 @@ auto ringbufferTestAssignmentOperator(size_t& succeededTests, size_t& failedTest
     succeededTests += 1;
 }
 
-// Test addOne(). Expected Behavior: The method adds an Element to the
-// Ringbuffer. The add Methods override existing elements in case there is
-// no left space. addOne(const T&, T&) should return -1 if no element
-// was replaced, zero if a element was replaced (removed contains that element).
-// addOne(const T&) just adds the element without returning the replaced element.
-auto ringbufferTestAddOne(size_t& succeededTests, size_t& failedTests) -> void
+
+// Test addOne(). Expected Behavior: @See test of used Ringbuffer
+auto lockedRingbufferTestAddOne(size_t& succeededTests, size_t& failedTests) -> void
 {
-    riot::Ringbuffer<TestObj, 1> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> rbuf;
     TestObj in1(1,2,3);
     TestObj replaced;
     // Add to empty buffer
@@ -146,12 +162,10 @@ auto ringbufferTestAddOne(size_t& succeededTests, size_t& failedTests) -> void
     succeededTests += 1;
 }
 
-// Test add(). Expected Behavior: The add() Method add up the specified
-// amount Elements from the given array and returns the number of added
-// elements.
-auto ringbufferTestAdd(size_t& succeededTests, size_t& failedTests) -> void
+// Test add(). Expected Behavior: @See test of used Ringbuffer
+auto lockedRingbufferTestAdd(size_t& succeededTests, size_t& failedTests) -> void
 {
-    riot::Ringbuffer<TestObj, 4> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 4>> rbuf;
     TestObj in[3] = {TestObj(1,2,3), TestObj(4,5,6), TestObj(7,8,9)};
     TestObj out[3];
     size_t ret = 0;
@@ -187,13 +201,10 @@ auto ringbufferTestAdd(size_t& succeededTests, size_t& failedTests) -> void
     succeededTests += 1;
 }
 
-// Test putOne(): Expected behavior: putOne() places and element in the
-// Ringbuffer if there is enough place to store the element. If the ringbuffer
-// is full -ENOMEM is returned ant the element is not added. If return is zero
-// the element was added to the Ringbuffer.
-auto ringbufferTestPutOne(size_t& succeededTests, size_t& failedTests) -> void
+// Test putOne(): Expected Behavior: @See test of used Ringbuffer
+auto lockedRingbufferTestPutOne(size_t& succeededTests, size_t& failedTests) -> void
 {
-    riot::Ringbuffer<TestObj, 1> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> rbuf;
     TestObj in1(1,2,3);
     TestObj in2(1,2,3);
     TestObj out;
@@ -219,13 +230,10 @@ auto ringbufferTestPutOne(size_t& succeededTests, size_t& failedTests) -> void
     succeededTests += 1;
 }
 
-// Test getOne(). Expected behavior: In case the Ringbuffer is empty, getOne()
-// must not change the input parameter and it must return -1. If the Ringbuffer
-// is not empty, the input parameter must contain the first added Object and the
-// return value must be zero.
-auto ringbufferTestGetOne(size_t& succeededTests, size_t& failedTests) -> void
+// Test getOne().Expected Behavior: @See test of used Ringbuffer
+auto lockedRingbufferTestGetOne(size_t& succeededTests, size_t& failedTests) -> void
 {
-    riot::Ringbuffer<TestObj, 1> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> rbuf;
     TestObj out(23, 42, 1);
     int ret = rbuf.getOne(out);
 
@@ -248,11 +256,10 @@ auto ringbufferTestGetOne(size_t& succeededTests, size_t& failedTests) -> void
     succeededTests += 1;
 }
 
-// Test get(). Expected Behavoir, takes to a specified amount from the
-// ringbuffer and returns the number of actualy taken elements.
-auto ringbufferTestGet(size_t& succeededTests, size_t& failedTests) -> void
+// Test get(). Expected Behavior: @See test of used Ringbuffers
+auto lockedRingbufferTestGet(size_t& succeededTests, size_t& failedTests) -> void
 {
-    riot::Ringbuffer<TestObj, 2> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 2>> rbuf;
     TestObj in[3] = {TestObj(1,2,3), TestObj(4,5,6), TestObj(7,8,9)};
     TestObj out[3];
     size_t ret = 0;
@@ -269,12 +276,10 @@ auto ringbufferTestGet(size_t& succeededTests, size_t& failedTests) -> void
     succeededTests += 1;
 }
 
-// Test peekOne(). Expected behavoir, returns a reference to the oldest element
-// in the Ringbuffer with zero as a return value. -1 is returned if the Ringbuffer
-// is empty.
-auto ringbufferTestPeekOne(size_t& succeededTests, size_t& failedTests) -> void
+// Test peekOne(). Expected Behavior: @See test of used Ringbuffer
+auto lockedRingbufferTestPeekOne(size_t& succeededTests, size_t& failedTests) -> void
 {
-    riot::Ringbuffer<TestObj, 2> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 2>> rbuf;
     TestObj out;
     int ret = rbuf.peekOne(out);
     if (ret != -1) {
@@ -305,11 +310,10 @@ auto ringbufferTestPeekOne(size_t& succeededTests, size_t& failedTests) -> void
     succeededTests += 1;
 }
 
-// Test peek(). Expected behavoir, put up to the specified amount of elements into
-// the supplied array without removing them from the buffer.
-auto ringbufferTestPeek(size_t& succeededTests, size_t& failedTests) -> void
+// Test peek(): Expected Behavior: @See test of used Ringbuffer
+auto lockedRingbufferTestPeek(size_t& succeededTests, size_t& failedTests) -> void
 {
-    riot::Ringbuffer<TestObj, 2> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 2>> rbuf;
     TestObj in[3] = {TestObj(1,2,3), TestObj(4,5,6), TestObj(7,8,9)};
     TestObj out[3];
     TestObj peeked[3];
@@ -331,13 +335,10 @@ auto ringbufferTestPeek(size_t& succeededTests, size_t& failedTests) -> void
     succeededTests += 1;
 }
 
-// Test addOne() and getOne(). Expected behavoir, two elements are added to the
-// Ringbuffer, after adding two get Operations are performed. The result of the
-// first getOne() must be equal to the first added object. The same goes for
-// the second get and add.
-auto ringbufferTestAddGet(size_t& succeededTests, size_t& failedTests) -> void
+// Test addOne() and getOne(). Expected Behavior: @See test of used Ringbuffer.
+auto lockedRingbufferTestAddGet(size_t& succeededTests, size_t& failedTests) -> void
 {
-    riot::Ringbuffer<TestObj, 2> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 2>> rbuf;
     TestObj in1(1,2,3);
     TestObj in2(4,5,6);
     TestObj out1;
@@ -363,11 +364,10 @@ auto ringbufferTestAddGet(size_t& succeededTests, size_t& failedTests) -> void
     succeededTests += 1;
 }
 
-// Test getFree(): Expected behavoir: Returns the amount of additional elements the
-// Ringbuffer can store.
-auto ringbufferTestGetFree(size_t& succeededTests, size_t& failedTests) -> void
+// Test getFree(): Expected Behavior: @See test of used Ringbuffer
+auto lockedRingbufferTestGetFree(size_t& succeededTests, size_t& failedTests) -> void
 {
-    riot::Ringbuffer<TestObj, 2> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 2>> rbuf;
     if (rbuf.getFree() != 2) {
         printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
         printf("!--- Reason: (rbuf.getFree() != 2)\n");
@@ -392,11 +392,10 @@ auto ringbufferTestGetFree(size_t& succeededTests, size_t& failedTests) -> void
     succeededTests += 1;
 }
 
-// Test empty() Method. Must return true after constructor, false after adding
-// of a single Element and true after getting a single Element.
-auto ringbufferTestEmpty(size_t& succeededTests, size_t& failedTests) -> void
+// Test empty() Method. Expected Behavior: @See test of used Ringbuffer
+auto lockedRingbufferTestEmpty(size_t& succeededTests, size_t& failedTests) -> void
 {
-    riot::Ringbuffer<TestObj, 1> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> rbuf;
     TestObj obj(1,2,3);
     // Constructed Ringbuffer must is empty
     if (!rbuf.empty()) {
@@ -425,11 +424,10 @@ auto ringbufferTestEmpty(size_t& succeededTests, size_t& failedTests) -> void
     succeededTests += 1;
 }
 
-// Test full() Method. Must return false after constructor, true after adding
-// of a single Element and false after getting a single Element.
-auto ringbufferTestFull(size_t& succeededTests, size_t& failedTests) -> void
+// Test full() Method. Expected Behavior: @See test of used Ringbuffer
+auto lockedRingbufferTestFull(size_t& succeededTests, size_t& failedTests) -> void
 {
-    riot::Ringbuffer<TestObj, 1> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> rbuf;
     TestObj obj(1,2,3);
     // Constructed Ringbuffer is not full.
     if (rbuf.full()) {
@@ -458,14 +456,11 @@ auto ringbufferTestFull(size_t& succeededTests, size_t& failedTests) -> void
     succeededTests += 1;
 }
 
-// Test remove(): Expected Behavior: This Function call removes atmost a given
-// number of elements. In case the Ringbuffer contains less elements
-// that the given n, it should be emptied and return
-// the amount of acutally removed elements.
-auto ringbufferTestRemove(size_t& succeededTests, size_t& failedTests) -> void
+// Test remove(): Expected Behavior: @See test of used Ringbuffer
+auto lockedRingbufferTestRemove(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Fill Ringbuffer
-    riot::Ringbuffer<TestObj, 3> rbuf;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 3>> rbuf;
     rbuf.putOne(TestObj(1,2,3));
     rbuf.putOne(TestObj(4,5,6));
     rbuf.putOne(TestObj(7,8,9));
@@ -500,11 +495,11 @@ auto ringbufferTestRemove(size_t& succeededTests, size_t& failedTests) -> void
     succeededTests += 1;
 }
 
-// Test swap(): Expected behavior: Swaps the contents of two Ringbuffers.
-auto ringbufferTestSwap(size_t& succeededTests, size_t& failedTests) -> void
+// Test swap() function: Expected Behavior: @See test of used Ringbuffer
+auto lockedRingbufferTestSwap(size_t& succeededTests, size_t& failedTests) -> void
 {
-    riot::Ringbuffer<TestObj, 1> rbuf1;
-    riot::Ringbuffer<TestObj, 1> rbuf2;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> rbuf1;
+    riot::LockedRingbuffer<riot::Ringbuffer<TestObj, 1>> rbuf2;
     TestObj in1(1,1,1);
     TestObj in2(2,2,2);
     TestObj out1;
@@ -525,26 +520,27 @@ auto ringbufferTestSwap(size_t& succeededTests, size_t& failedTests) -> void
 }
 
 // Run all Ringbuffer Tests
-auto runRingbufferTests(size_t& succeededTests, size_t& failedTests) -> void
+auto runLockedRingbufferTests(size_t& succeededTests, size_t& failedTests) -> void
 {
-    ringbufferTestDefaultConstructor(succeededTests, failedTests);
-    ringbufferTestInitializerListConstructor(succeededTests, failedTests);
-    ringbufferTestFillConstructor(succeededTests, failedTests);
-    ringbufferTestCopyConstructor(succeededTests, failedTests);
-    ringbufferTestAssignmentOperator(succeededTests, failedTests);
-    ringbufferTestAddOne(succeededTests, failedTests);
-    ringbufferTestAdd(succeededTests, failedTests);
-    ringbufferTestPutOne(succeededTests, failedTests);
-    ringbufferTestGetOne(succeededTests, failedTests);
-    ringbufferTestGet(succeededTests, failedTests);
-    ringbufferTestPeekOne(succeededTests, failedTests);
-    ringbufferTestPeek(succeededTests, failedTests);
-    ringbufferTestAddGet(succeededTests, failedTests);
-    ringbufferTestGetFree(succeededTests, failedTests);
-    ringbufferTestEmpty(succeededTests, failedTests);
-    ringbufferTestFull(succeededTests, failedTests);
-    ringbufferTestRemove(succeededTests, failedTests);
-    ringbufferTestSwap(succeededTests, failedTests);
+    lockedRingbufferTestDefaultConstructor(succeededTests, failedTests);
+    lockedRingbufferTestInitializerListConstructor(succeededTests, failedTests);
+    lockedRingbufferTestFillConstructor(succeededTests, failedTests);
+    lockedRingbufferTestCopyRingbufferConstructor(succeededTests, failedTests);
+    lockedRingbufferTestCopyConstructor(succeededTests, failedTests);
+    lockedRingbufferTestAssignmentOperator(succeededTests, failedTests);
+    lockedRingbufferTestAddOne(succeededTests, failedTests);
+    lockedRingbufferTestAdd(succeededTests, failedTests);
+    lockedRingbufferTestPutOne(succeededTests, failedTests);
+    lockedRingbufferTestGetOne(succeededTests, failedTests);
+    lockedRingbufferTestGet(succeededTests, failedTests);
+    lockedRingbufferTestPeekOne(succeededTests, failedTests);
+    lockedRingbufferTestPeek(succeededTests, failedTests);
+    lockedRingbufferTestAddGet(succeededTests, failedTests);
+    lockedRingbufferTestGetFree(succeededTests, failedTests);
+    lockedRingbufferTestEmpty(succeededTests, failedTests);
+    lockedRingbufferTestFull(succeededTests, failedTests);
+    lockedRingbufferTestRemove(succeededTests, failedTests);
+    lockedRingbufferTestSwap(succeededTests, failedTests);
 }
 
-#endif // RINGBUFFER_TESTS_HPP
+#endif // LOCKEDRINGBUFFER_TESTS_HPP
