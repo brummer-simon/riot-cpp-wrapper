@@ -36,8 +36,8 @@ class LockedRingbuffer;
 
 // Forward declaration swap function (needs friend access)
 template <typename T, std::size_t Size, typename Buffer, typename Lock>
-auto swap(LockedRingbuffer<T, Size, Buffer, Lock>& lhs,
-          LockedRingbuffer<T, Size, Buffer, Lock>& rhs) -> void;
+auto swap(LockedRingbuffer<T, Size, Buffer, Lock> & lhs,
+          LockedRingbuffer<T, Size, Buffer, Lock> & rhs) -> void;
 
 // Implementation LockedRingbuffer
 template <typename T, std::size_t Size, typename Buffer = Ringbuffer<T, Size>,
@@ -47,10 +47,10 @@ class LockedRingbuffer
 public:
     // Use Membertypes of internal Ringbuffer
     typedef T ValueType;
-    typedef T& Reference;
-    typedef T* Pointer;
-    typedef const T& ConstReference;
-    typedef const T* ConstPointer;
+    typedef T & Reference;
+    typedef T * Pointer;
+    typedef T const & ConstReference;
+    typedef T const * ConstPointer;
     typedef std::size_t SizeType;
 
     /**
@@ -64,8 +64,8 @@ public:
      * @brief Initializer list Constructor.
      * @see Documentation of supplied template T.
      */
-    LockedRingbuffer(const std::initializer_list<ValueType>& li)
-        : buffer_(Buffer(li))
+    LockedRingbuffer(std::initializer_list<ValueType> const & list)
+        : buffer_(Buffer(list))
     {
     }
 
@@ -82,19 +82,8 @@ public:
      * @brief Fill - Constructor.
      * @see Documentation of supplied template T.
      */
-    LockedRingbuffer(ConstReference initValue, const SizeType n)
+    LockedRingbuffer(ConstReference initValue, SizeType const n)
         : buffer_(initValue, n)
-    {
-    }
-
-    /**
-     * @brief Copy Buffer - Constructor. Copies the contents of the
-     *        given Ringbuffer of Type T into the LockedRingbuffer.
-     * @param[in] buffer   Ref to Ringbuffer that contains the
-     *                     elements, that should be copied.
-     */
-    LockedRingbuffer(const Buffer& buffer)
-        : buffer_(buffer)
     {
     }
 
@@ -102,7 +91,7 @@ public:
      * @brief Copy - Constructor.
      * @see Documentation of supplied template T.
      */
-    LockedRingbuffer(const LockedRingbuffer& other)
+    LockedRingbuffer(LockedRingbuffer const & other)
     {
         riot::LockGuard<Lock> guardOther(other.lock_);
         this->buffer_ = other.buffer_;
@@ -112,7 +101,7 @@ public:
      * @brief Synchronized assignment operator.
      * @see Documentation operator =() of supplied template T.
      */
-    auto operator = (const LockedRingbuffer& rhs) -> LockedRingbuffer&
+    auto operator = (LockedRingbuffer const & rhs) -> LockedRingbuffer &
     {
         if (this != &rhs) {
             // Aquire both locks
@@ -237,7 +226,7 @@ public:
      * @brief Synchronized remove().
      * @see Documentation remove() of supplied template T.
      */
-    auto remove(const SizeType n) -> SizeType
+    auto remove(SizeType const n) -> SizeType
     {
         riot::LockGuard<Lock> guard(this->lock_);
         return this->buffer_.remove(n);

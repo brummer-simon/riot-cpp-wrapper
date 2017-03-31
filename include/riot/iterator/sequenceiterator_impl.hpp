@@ -31,8 +31,8 @@ class SequenceIterator;
 
 // Forward declaration of SequenceIterators friend functions.
 template <typename T>
-auto operator == (const SequenceIterator<T>& lhs,
-                  const SequenceIterator<T>& rhs) -> bool;
+auto operator == (SequenceIterator<T> const & lhs,
+                  SequenceIterator<T> const & rhs) -> bool;
 
 // Implementation of SequenceIterator
 template <typename T>
@@ -41,8 +41,8 @@ class SequenceIterator
 public:
     // Member Types
     typedef T ValueType;
-    typedef T& Reference;
-    typedef T* Pointer;
+    typedef T & Reference;
+    typedef T * Pointer;
 
     /**
      * @brief Fully-specified Constructor.
@@ -57,7 +57,7 @@ public:
      * @brief Move iterator to next element.
      * @returns   Ref to iterator, pointing to next element.
      */
-    auto operator ++ () -> SequenceIterator&
+    auto operator ++ () -> SequenceIterator &
     {
         this->ptr_ += 1;
         return *this;
@@ -67,7 +67,7 @@ public:
      * @brief Move iterator to previous element.
      * @returns   Ref to iterator, pointing to previous element.
      */
-    auto operator -- () -> SequenceIterator&
+    auto operator -- () -> SequenceIterator &
     {
         this->ptr_ -= 1;
         return *this;
@@ -94,8 +94,8 @@ public:
 private:
     Pointer ptr_;   /**< Pointer to the current element. */
 
-    friend auto operator == <T>(const SequenceIterator& lhs,
-                                const SequenceIterator& rhs) -> bool;
+    friend auto operator == <T>(SequenceIterator const & lhs,
+                                SequenceIterator const & rhs) -> bool;
 };
 
 /**
@@ -105,8 +105,8 @@ private:
  * @returns         true if the Iterators pointing to the same location.
  */
 template <typename T>
-auto operator == (const SequenceIterator<T>& lhs,
-                  const SequenceIterator<T>& rhs) -> bool
+auto operator == (SequenceIterator<T> const & lhs,
+                  SequenceIterator<T> const & rhs) -> bool
 {
     return (lhs.ptr_ == rhs.ptr_);
 }
@@ -118,8 +118,8 @@ auto operator == (const SequenceIterator<T>& lhs,
  * @returns         true if the Iterators pointing to different locations.
  */
 template <typename T>
-auto operator != (const SequenceIterator<T>& lhs,
-                  const SequenceIterator<T>& rhs) -> bool
+auto operator != (SequenceIterator<T> const & lhs,
+                  SequenceIterator<T> const & rhs) -> bool
 {
     return !(lhs == rhs);
 }

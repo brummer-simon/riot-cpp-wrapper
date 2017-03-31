@@ -38,7 +38,7 @@ public:
      * @brief Constructor
      * @param[in] value   The value the semaphore is initialized with.
      */
-    Semaphore(const std::size_t value)
+    Semaphore(std::size_t const value)
     {
         sema_create(&(this->sema_), value);
     }
@@ -90,24 +90,24 @@ public:
      * @brief wait operation with timeout.
      * @note Blocks if semaphore value is less or equal zero.
      *       Until a post() call was performed or a the timeout expired.
-     * @param[in] timeout_us   Timout duration in microseconds.
+     * @param[in] timeout   Timout duration in microseconds.
      * @returns   Zero on success.
      *            -ETIMEDOUT, if the semaphore times out.
      *            -ECANCELED, if the semaphore was destroyed.
      */
-    auto waitTimed(const uint64_t timeout_us) -> int
+    auto waitTimed(uint64_t const timeout) -> int
     {
-        return sema_wait_timed(&(this->sema_), timeout_us);
+        return sema_wait_timed(&(this->sema_), timeout);
     }
 
 private:
     sema_t sema_; /**< Semaphore struct */
 
     // Deleted with purpose
-    Semaphore(const Semaphore& other) = delete;
-    Semaphore(const Semaphore&& other) = delete;
-    Semaphore& operator = (const Semaphore& other) = delete;
-    Semaphore& operator = (const Semaphore&& other) = delete;
+    Semaphore(Semaphore const &) = delete;
+    Semaphore(Semaphore const &&) = delete;
+    auto operator = (Semaphore const &) -> Semaphore & = delete;
+    auto operator = (Semaphore const &&) -> Semaphore & = delete;
 };
 
 } // namespace riot

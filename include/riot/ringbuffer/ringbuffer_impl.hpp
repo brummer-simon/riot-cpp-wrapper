@@ -41,10 +41,10 @@ class Ringbuffer
 public:
     // Member Types
     typedef T ValueType;
-    typedef T& Reference;
-    typedef T* Pointer;
-    typedef const T& ConstReference;
-    typedef const T* ConstPointer;
+    typedef T & Reference;
+    typedef T * Pointer;
+    typedef T const & ConstReference;
+    typedef T const * ConstPointer;
     typedef std::size_t SizeType;
 
     /**
@@ -61,12 +61,12 @@ public:
      *        up to 'size' elements from @p li into constructed array.
      * @param[in] li   Reference to init list used for initialization.
      */
-    Ringbuffer(const std::initializer_list<ValueType>& li)
+    Ringbuffer(std::initializer_list<ValueType> const & list)
         : Ringbuffer()
     {
-        SizeType n = (Size < li.size()) ? Size : li.size();
+        SizeType n = (Size < list.size()) ? Size : list.size();
         for (SizeType i = 0; i < n; ++i) {
-            this->putOne(*(li.begin() + i));
+            this->putOne(*(list.begin() + i));
         }
     }
 
@@ -87,7 +87,7 @@ public:
      * @param[in] n           Maximum Number of Elements of @p initValue, that
      *                        should be stored in Ringbuffer.
      */
-    Ringbuffer(ConstReference initValue, const SizeType n)
+    Ringbuffer(ConstReference initValue, SizeType const n)
         : Ringbuffer()
     {
         SizeType size = (n < Size) ? n : Size;
@@ -101,7 +101,7 @@ public:
      * @pre @p other must be copy-assignable.
      * @param[in] other   The Ringbuffer to copy.
      */
-    Ringbuffer(const Ringbuffer& other)
+    Ringbuffer(Ringbuffer const & other)
     {
         for (SizeType i = 0; i < Size; ++i) {
             this->mem_[i] = other.mem_[i];
@@ -114,7 +114,7 @@ public:
      * @brief Copy assignment operator.
      * @param[in] rhs   Object to assign to this object.
      */
-    auto operator = (const Ringbuffer& rhs) -> Ringbuffer&
+    auto operator = (Ringbuffer const & rhs) -> Ringbuffer &
     {
         if (this != &rhs) {
             for (SizeType i = 0; i < Size; ++i) {
@@ -301,7 +301,7 @@ public:
      * @param[in] n   At most number of elements to remove.
      * @returns       Actual number of removed elements.
      */
-    auto remove(const SizeType n) -> SizeType
+    auto remove(SizeType const n) -> SizeType
     {
         SizeType actualSize = n * sizeof(ValueType);
         SizeType ret = ringbuffer_remove(&(this->rbuf_), actualSize);
@@ -365,7 +365,7 @@ private:
  * @param[in,out] rhs   Ringbuffer (right hand side).
  */
 template <typename T, std::size_t Size>
-auto swap(Ringbuffer<T, Size>& lhs, Ringbuffer<T, Size>& rhs) -> void
+auto swap(Ringbuffer<T, Size> & lhs, Ringbuffer<T, Size> & rhs) -> void
 {
     Ringbuffer<T, Size> tmp(rhs);
     rhs = lhs;

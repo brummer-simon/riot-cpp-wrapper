@@ -83,10 +83,10 @@ private:
     mutex_t mutex_; /**< RIOT-OS mutex_t structure to perform operations on */
 
     // Deleted with purpose
-    Mutex(const Mutex& other) = delete;
-    Mutex(const Mutex&& other) = delete;
-    Mutex& operator = (const Mutex& other) = delete;
-    Mutex& operator = (const Mutex&& other) = delete;
+    Mutex(Mutex const &) = delete;
+    Mutex(Mutex const &&) = delete;
+    auto operator = (Mutex const &) -> Mutex & = delete;
+    auto operator = (Mutex const &&) -> Mutex & = delete;
 };
 
 } // namespace riot

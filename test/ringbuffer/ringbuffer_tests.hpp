@@ -12,7 +12,7 @@
 #include "../testobj.hpp"
 #include "riot/ringbuffer.hpp"
 
-// Test Constructors: They should behave as Expected.
+// Test Constructor. Expected behavoir: Create empty Ringbuffer.
 auto ringbufferTestDefaultConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Default Constructor
@@ -29,6 +29,7 @@ auto ringbufferTestDefaultConstructor(size_t& succeededTests, size_t& failedTest
     succeededTests += 1;
 }
 
+// Test Initializer list Constructor. Expected behavoir: store as much elements as possible in Ringbuffer.
 auto ringbufferTestInitializerListConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Initializer list Constructor
@@ -46,6 +47,7 @@ auto ringbufferTestInitializerListConstructor(size_t& succeededTests, size_t& fa
     succeededTests += 1;
 }
 
+// Test fill Constructor. Expected behavoir: Fill ringbuffer with up to n elements.
 auto ringbufferTestFillConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Fill-Constructor
@@ -71,6 +73,7 @@ auto ringbufferTestFillConstructor(size_t& succeededTests, size_t& failedTests) 
     succeededTests += 1;
 }
 
+// Test Copy Constructor. Expected behavoir: Copy object
 auto ringbufferTestCopyConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Copy-Constructor
@@ -87,6 +90,7 @@ auto ringbufferTestCopyConstructor(size_t& succeededTests, size_t& failedTests) 
     succeededTests += 1;
 }
 
+// Test Assignment operator. Expected behavoir: assign object.
 auto ringbufferTestAssignmentOperator(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Assignment Operator

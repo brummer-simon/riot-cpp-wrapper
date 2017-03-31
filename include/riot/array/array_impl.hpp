@@ -39,13 +39,13 @@ class Array
 public:
     // Member Types
     typedef T ValueType;
-    typedef T& Reference;
-    typedef const T& ConstReference;
-    typedef T* Pointer;
-    typedef const T* ConstPointer;
+    typedef T & Reference;
+    typedef T const & ConstReference;
+    typedef T * Pointer;
+    typedef T const * ConstPointer;
     typedef std::size_t SizeType;
     typedef SequenceIterator<T> Iterator;
-    typedef SequenceIterator<const T> ConstIterator;
+    typedef SequenceIterator<T const> ConstIterator;
     typedef BackwardIterator<Iterator> ReverseIterator;
     typedef BackwardIterator<ConstIterator> ConstReverseIterator;
 
@@ -70,11 +70,11 @@ public:
      *        up 'size' elements from @p li into constructed array.
      * @param[in] li   Reference to init list used for initialization.
      */
-    Array(const std::initializer_list<ValueType>& li)
+    Array(std::initializer_list<ValueType> const & list)
     {
-        SizeType n = (Size < li.size()) ? Size : li.size();
+        SizeType n = (Size < list.size()) ? Size : list.size();
         for (SizeType i = 0; i < n; ++i) {
-            this->array_[i] = *(li.begin() + i);
+            this->array_[i] = *(list.begin() + i);
         }
     }
 
@@ -83,7 +83,7 @@ public:
      * @pre @p other must be copy-assignable.
      * @param[in] other   Array to copy.
      */
-    Array(const Array& other)
+    Array(Array const & other)
     {
         for (SizeType i = 0; i < Size; ++i) {
             this->array_[i] = other.array_[i];
@@ -96,7 +96,7 @@ public:
      * @param[in] other   Reference to object that should be assigned.
      * @return            Reference to this object
      */
-    auto operator = (const Array& rhs) -> Array&
+    auto operator = (Array const & rhs) -> Array &
     {
         if (this != &rhs) {
             for (SizeType i = 0; i < Size; ++i) {
@@ -137,7 +137,7 @@ public:
      *                   within boundries. If not, a reference to the
      *                   first element is returned.
      */
-    auto at(SizeType pos, int& err) -> Reference
+    auto at(SizeType pos, int & err) -> Reference
     {
         if (pos < Size) {
             err = 0;
@@ -156,7 +156,7 @@ public:
      *                   was within boundries. If not, a const reference to
      *                   the first element is returned.
      */
-    auto at(SizeType pos, int& err) const -> ConstReference
+    auto at(SizeType pos, int & err) const -> ConstReference
     {
         if (pos < Size) {
             err = 0;
@@ -289,7 +289,7 @@ public:
      * @brief Swaps content with another array of same type and size.
      * @param[in,out] other   Array to swap elements with.
      */
-    auto swap(Array& other) -> void
+    auto swap(Array & other) -> void
     {
         Array tmp(other);
         other = *this;
@@ -308,7 +308,7 @@ public:
  * @returns         true if lhs and rhs internal arrays contain equal bytes.
  */
 template <typename T, std::size_t Size>
-auto operator == (const Array<T, Size>& lhs, const Array<T, Size>& rhs) -> bool
+auto operator == (Array<T, Size> const & lhs, Array<T, Size> const & rhs) -> bool
 {
     if (&lhs == &rhs) {
         return true;
@@ -329,7 +329,7 @@ auto operator == (const Array<T, Size>& lhs, const Array<T, Size>& rhs) -> bool
  * @returns         true if lhs and rhs internal arrays contents differ.
  */
 template <typename T, std::size_t Size>
-auto operator != (const Array<T, Size>& lhs, const Array<T, Size>& rhs) -> bool
+auto operator != (Array<T, Size> const & lhs, Array<T, Size> const & rhs) -> bool
 {
     return !(lhs == rhs);
 }
