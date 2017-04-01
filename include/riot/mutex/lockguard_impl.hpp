@@ -38,7 +38,7 @@ public:
      * @brief Constructor. Trys to aquire given lock.
      * @param[in] lock   Lock that should be aquired.
      */
-    LockGuard(LockType& lock)
+    explicit LockGuard(LockType & lock)
         : lock_(lock)
     {
         lock_.lock();
@@ -53,13 +53,13 @@ public:
     }
 
 private:
-    LockType& lock_; /**< Reference to the lock_guards lock */
+    LockType & lock_; /**< Reference to the lock_guards lock */
 
     // Deleted with purpose
-    LockGuard(const LockGuard& other) = delete;
-    LockGuard(const LockGuard&& other) = delete;
-    LockGuard& operator = (const LockGuard& other) = delete;
-    LockGuard& operator = (const LockGuard&& other) = delete;
+    LockGuard(LockGuard const &) = delete;
+    LockGuard(LockGuard const &&) = delete;
+    auto operator = (LockGuard const &) -> LockGuard & = delete;
+    auto operator = (LockGuard const &&) -> LockGuard & = delete;
 };
 
 } // namespace riot

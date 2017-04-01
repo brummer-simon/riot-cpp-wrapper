@@ -28,6 +28,8 @@ auto arrayTestInitConstructor(size_t& succeededTests, size_t& failedTests) -> vo
     succeededTests += 1;
 }
 
+// Test initializer list constructor. Expected behavoir: Store as much elements
+// from initializer list as possible.
 auto arrayTestInitializerListConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // initializer_list
@@ -42,6 +44,7 @@ auto arrayTestInitializerListConstructor(size_t& succeededTests, size_t& failedT
     succeededTests += 1;
 }
 
+// Test Copy Constructor: Expected Behavoir: Copies Object.
 auto arrayTestCopyConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Copy Constructor
@@ -57,6 +60,7 @@ auto arrayTestCopyConstructor(size_t& succeededTests, size_t& failedTests) -> vo
     succeededTests += 1;
 }
 
+// Test Copy Constructor: Expected Behavoir: Assigns Object
 auto arrayTestAssignmentOperator(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Assignment Operator

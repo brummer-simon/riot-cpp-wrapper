@@ -13,7 +13,7 @@
 #include "../testlock.hpp"
 #include "riot/ringbuffer.hpp"
 
-// Test Constructors: They should behave as Expected.
+// Test Constructor. Expected Behavoir: Default constructor.
 auto lockedRingbufferTestDefaultConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Default Constructor
@@ -30,6 +30,7 @@ auto lockedRingbufferTestDefaultConstructor(size_t& succeededTests, size_t& fail
     succeededTests += 1;
 }
 
+// Test Initializer list Constructor. Expected Behavoir: @see Ringbuffer.
 auto lockedRingbufferTestInitializerListConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Initializer list Constructor
@@ -47,6 +48,7 @@ auto lockedRingbufferTestInitializerListConstructor(size_t& succeededTests, size
     succeededTests += 1;
 }
 
+// Test Initializer list Constructor. Expected Behavoir: @see Ringbuffer.
 auto lockedRingbufferTestFillConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Fill-Constructor
@@ -72,24 +74,7 @@ auto lockedRingbufferTestFillConstructor(size_t& succeededTests, size_t& failedT
     succeededTests += 1;
 }
 
-auto lockedRingbufferTestCopyRingbufferConstructor(size_t& succeededTests, size_t& failedTests) -> void
-{
-    // Copy Ringbuffer-Constructor
-    riot::Ringbuffer<TestObj, 1> rbuf(TestObj(1,2,3));
-    riot::LockedRingbuffer<TestObj, 1> lrbuf(rbuf);
-    TestObj ret1;
-    TestObj ret2;
-    rbuf.getOne(ret1);
-    lrbuf.getOne(ret2);
-    if (ret1 != ret2) {
-        printf("Test '%s' failed.\n", __PRETTY_FUNCTION__);
-        printf("!--- Reason: (ret1 != ret2)\n");
-        failedTests += 1;
-    }
-    printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
-    succeededTests += 1;
-}
-
+// Test Initializer list Constructor. Expected Behavoir: Copy constructor.
 auto lockedRingbufferTestCopyConstructor(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Copy-Constructor
@@ -106,6 +91,7 @@ auto lockedRingbufferTestCopyConstructor(size_t& succeededTests, size_t& failedT
     succeededTests += 1;
 }
 
+// Test assignment operator. Expected Behavoir: default.
 auto lockedRingbufferTestAssignmentOperator(size_t& succeededTests, size_t& failedTests) -> void
 {
     // Assignment Operator
@@ -525,7 +511,6 @@ auto runLockedRingbufferTests(size_t& succeededTests, size_t& failedTests) -> vo
     lockedRingbufferTestDefaultConstructor(succeededTests, failedTests);
     lockedRingbufferTestInitializerListConstructor(succeededTests, failedTests);
     lockedRingbufferTestFillConstructor(succeededTests, failedTests);
-    lockedRingbufferTestCopyRingbufferConstructor(succeededTests, failedTests);
     lockedRingbufferTestCopyConstructor(succeededTests, failedTests);
     lockedRingbufferTestAssignmentOperator(succeededTests, failedTests);
     lockedRingbufferTestAddOne(succeededTests, failedTests);
