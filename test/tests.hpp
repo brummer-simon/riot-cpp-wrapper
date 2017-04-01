@@ -14,6 +14,7 @@
 #include "array/array_tests.hpp"
 #include "ringbuffer/ringbuffer_tests.hpp"
 #include "ringbuffer/lockedringbuffer_tests.hpp"
+#include "ringbuffer/blockingringbuffer_tests.hpp"
 #include "semaphore/semaphore_tests.hpp"
 
 // Run all Tests.
@@ -29,6 +30,7 @@ auto runAllTests() -> void
     runArrayTests(succeededTests, failedTests);
     runRingbufferTests(succeededTests, failedTests);
     runLockedRingbufferTests(succeededTests, failedTests);
+    runBlockingRingbufferTests(succeededTests, failedTests);
     runSemaphoreTests(succeededTests, failedTests);
 
     printf("\n--- Testrun finished ---\n\n");

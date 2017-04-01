@@ -11,7 +11,7 @@
   * @{
   *
   * @file
-  * @brief       Threadsafe Ringbuffer. All Ringbuffer operations are
+  * @brief       Threadsafe Ringbuffer. All ringbuffer operations are
   *              synchronized via an internal Lock.
   *
   * @author      Simon Brummer <simon.brummer@posteo.de>

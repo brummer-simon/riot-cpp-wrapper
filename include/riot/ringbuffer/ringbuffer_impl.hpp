@@ -11,7 +11,7 @@
   * @{
   *
   * @file
-  * @brief       Wrapper class for RIOTs Ringbuffer implementation wrapper.
+  * @brief       Wrapper class for RIOTs ringbuffer implementation wrapper.
   *
   * @author      Simon Brummer <simon.brummer@posteo.de>
   *
@@ -31,7 +31,7 @@ namespace riot
 
 /**
  * @brief C++ wrapper for Ringbuffers.
- * @note The wrapped Ringbuffer operates on raw memory.
+ * @note The wrapped ringbuffer operates on raw memory.
  *       This wrapper tries to avoid the pitfalls that come with
  *       memory operations on c++ objects.
  */
@@ -57,9 +57,9 @@ public:
     }
 
     /**
-     * @brief Constructor: Initialize Ringbuffer with initializer_list. Copies
-     *        up to 'size' elements from @p li into constructed array.
-     * @param[in] li   Reference to init list used for initialization.
+     * @brief Constructor: Initialize ringbuffer with initializer_list. Copies
+     *        up to 'Size' elements from @p li into constructed Ringbuffer.
+     * @param[in] list   Reference to initializer list.
      */
     Ringbuffer(std::initializer_list<ValueType> const & list)
         : Ringbuffer()
@@ -71,7 +71,7 @@ public:
     }
 
     /**
-     * @brief Fill-Constructor: Fill Ringbuffer with given Element.
+     * @brief Fill-Constructor: Fill ringbuffer with given Element.
      * @param[in] initValue   Reference to object the ringbuffer
      *                        should be filled with.
      */
@@ -81,7 +81,7 @@ public:
     }
 
     /**
-     * @brief Fill-Constructor: Fill Ringbuffer with up to @p n elements.
+     * @brief Fill-Constructor: Fill ringbuffer with up to @p n elements.
      * @param[in] initValue   Refernce to object the ringbuffer
      *                        should be filled with.
      * @param[in] n           Maximum Number of Elements of @p initValue, that
@@ -99,7 +99,7 @@ public:
     /**
      * @brief Copy Constructor.
      * @pre @p other must be copy-assignable.
-     * @param[in] other   The Ringbuffer to copy.
+     * @param[in] other   The ringbuffer to copy.
      */
     Ringbuffer(Ringbuffer const & other)
     {
@@ -163,7 +163,7 @@ public:
      * @brief Put an element to Ringbuffer, if there is enough space left.
      * @param[in] src   Reference to object to place into ringbuffer.
      * @returns         Zero if element added to Ringbuffer.
-     *                  -ENOMEM if Ringbuffer is full.
+     *                  -ENOMEM if ringbuffer is full.
      */
     auto putOne(ConstReference src) -> int
     {
@@ -179,7 +179,7 @@ public:
      * @param[out] dst   Reference where the oldest element in the ringbuffer
      *                   Should be stored.
      * @return           Zero if a element was assigned to @p dst.
-     *                   -1 if the Ringbuffer is empty.
+     *                   -1 if the ringbuffer is empty.
      */
     auto getOne(Reference dst) -> int
     {
@@ -194,7 +194,7 @@ public:
      * @brief Get oldest element without removing it.
      * @param[out] dst   Reference to the oldest element in Ringbuffer.
      * @return           Zero if a element was assigned to @p dst.
-     *                   -1 if the Ringbuffer is empty.
+     *                   -1 if the ringbuffer is empty.
      */
     auto peekOne(Reference dst) const -> int
     {
@@ -244,7 +244,7 @@ public:
     }
 
     /**
-     * @brief Take up to @p n elements from the Ringbuffer without removing
+     * @brief Take up to @p n elements from the ringbuffer without removing
      *        those elements.
      * @param[out] dst   Array to store elements from the ringbuffer.
      * @param[in] n      Maximum number of elements to store in @p dst.
@@ -252,7 +252,7 @@ public:
      */
     auto peek(ValueType dst[], SizeType n) const -> SizeType
     {
-        // Save Ringbuffer state
+        // Save ringbuffer state
         ringbuffer_t rbufOld = this->rbuf_;
         // Perform peek-operation
         SizeType avail = Size - this->getFree();
@@ -262,7 +262,7 @@ public:
         for (SizeType i = 0; i < n; ++i) {
             this->getHead_(dst[i]);
         }
-        // Restore Ringbuffer state
+        // Restore ringbuffer state
         this->rbuf_ = rbufOld;
         return n;
     }
@@ -277,9 +277,9 @@ public:
     }
 
     /**
-     * @brief Check if Ringbuffer is empty.
-     * @returns   non-zero if Ringbuffer is empty.
-     *            zero if Ringbuffer contains elements.
+     * @brief Check if ringbuffer is empty.
+     * @returns   non-zero if ringbuffer is empty.
+     *            zero if ringbuffer contains elements.
      */
     auto empty() const -> int
     {
@@ -287,9 +287,9 @@ public:
     }
 
     /**
-     * @brief Check if Ringbuffer is full.
-     * @returns   non-zero if Ringbuffer is full.
-     *            zero if Ringbuffer is not full.
+     * @brief Check if ringbuffer is full.
+     * @returns   non-zero if ringbuffer is full.
+     *            zero if ringbuffer is not full.
      */
     auto full() const -> int
     {
@@ -361,8 +361,8 @@ private:
 
 /**
  * @brief Swaps contents of two ringbuffers.
- * @param[in,out] lhs   Ringbuffer (left hand side).
- * @param[in,out] rhs   Ringbuffer (right hand side).
+ * @param[in,out] lhs   ringbuffer (left hand side).
+ * @param[in,out] rhs   ringbuffer (right hand side).
  */
 template <typename T, std::size_t Size>
 auto swap(Ringbuffer<T, Size> & lhs, Ringbuffer<T, Size> & rhs) -> void
