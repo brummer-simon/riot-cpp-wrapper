@@ -23,5 +23,6 @@
 
 #include "ringbuffer/ringbuffer_impl.hpp"
 #include "ringbuffer/lockedringbuffer_impl.hpp"
+#include "ringbuffer/blockingringbuffer_impl.hpp"
 
 #endif // RINGBUFFER_HPP
