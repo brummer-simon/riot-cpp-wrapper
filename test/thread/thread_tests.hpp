@@ -13,11 +13,21 @@
 
 using namespace riot;
 
+struct TestContext
+{
+    int input;
+    int output;
+};
+
+auto task(Thread<1, TestContext> & thread) -> void {
+    printf("PID: %d, Name: %s, Status: %d\n", thread.getPid(), thread.getName(), thread.getStatus());
+}
+
 auto threadTestDefaultConstructor(size_t & succeededTests, size_t & failedTests) -> void
 {
-    Thread<thread::stacksize::Default> th;
 
-    (void) th;
+    Thread<1, TestContext> thread(task, thread::priority::Main - 1);
+
     (void) failedTests;
 
     printf("Test '%s' succeeded.\n", __PRETTY_FUNCTION__);
