@@ -6,23 +6,23 @@
  * directory for more details.
  */
 
-
-  /**
-   * @ingroup     riot_cpp_wrapper
-   * @{
-   *
-   * @file
-   * @brief       C++ Wrapper for RIOT-OS thread implementation.
-   *
-   * @author      Simon Brummer <simon.brummer@posteo.de>
-   *
-   * @}
-   */
+/**
+ * @ingroup     riot_cpp_wrapper
+ * @{
+ *
+ * @file
+ * @brief       C++ Wrapper for RIOT-OS thread implementation.
+ *
+ * @author      Simon Brummer <simon.brummer@posteo.de>
+ *
+ * @}
+ */
 
 #ifndef THREAD_IMPL_HPP
 #define THREAD_IMPL_HPP
 
-#include "thread.h"
+#include <thread.h>
+#include "stack_impl.hpp"
 
 namespace riot
 {
@@ -36,16 +36,6 @@ typedef enum {
     Main    = THREAD_PRIORITY_MAIN
 } Priority;
 } // namespace priority
-
-namespace stacksize
-{
-typedef enum {
-    Default = THREAD_STACKSIZE_DEFAULT,
-    Minimum = THREAD_STACKSIZE_MINIMUM,
-    Idle    = THREAD_STACKSIZE_IDLE,
-    Main    = THREAD_STACKSIZE_MAIN
-} Stacksize;
-} // namespace stacksize
 
 namespace status
 {
@@ -66,34 +56,42 @@ typedef enum {
 } Status;
 } // namespace status
 
+auto getPid() -> int
+{
+    return thread_getpid();
+}
+
 // Forward declaration thread function wrapper.
 namespace keepout
 {
-template <std::size_t Stacksize, typename Context>
+template <typename Context, std::size_t Stacksize>
 auto func(void * thread) -> void *;
 } // namespace keepout
 } // namespace thread
 
-template<std::size_t Stacksize = thread::stacksize::Default, typename Context>
+template<typename Context, std::size_t Stacksize = thread::stacksize::Default>
 class Thread
 {
 public:
-    // Define signature of thread task.
-    typedef auto (*Task) (Thread<Stacksize> & thread) -> void;
+    typedef thread::Stack<Stacksize> StackType;
 
-    Thread(Task const task, uint8_t const priority)
-        : Thread(task, priority, "")
+    // Define signature of thread task, the user has to supply.
+    typedef auto (*Task) (Thread<Context, Stacksize> & thread) -> void;
+
+    Thread(Task const task, StackType & stack, uint8_t const priority, Context const & context)
+        : Thread(task, stack, priority, context, "")
     {
     }
 
-    Thread(Task const task, uint8_t const priority, char const * const name)
+    Thread(Task const task, StackType & stack, uint8_t const priority, Context const & context,
+           char const * const name)
         : task_(task)
-        , priority_(priority)
+        , context_(context)
         , name_(name)
     {
         // Start thread
-        thread_create(this->stack_, sizeof(this->stack_), this->priority_,
-                      0, thread::keepout::func<Stacksize, Context>, this, this->name_);
+        thread_create(reinterpret_cast<char *>(stack.getBase()), stack.getSize(), priority, 0,
+                      thread::keepout::func<Context, Stacksize>, this, this->name_);
     }
 
     auto getPid() const -> int
@@ -106,37 +104,45 @@ public:
         return this->name_;
     }
 
+    auto getContext() -> Context &
+    {
+        return this->context_;
+    }
+
     auto getStatus() const -> thread::status::Status
     {
         return static_cast<thread::status::Status>(thread_getstatus(this->pid_));
     }
 
-private:
-    Task task_;                /**< Thread task */
-    uint8_t priority_;         /**< Thread priority */
-    char const * const name_;  /**< Thread name */
-    char stack_[Stacksize];    /**< Thread stack */
-    kernel_pid_t pid_;         /**< Thread Id of running thread */
-    Context contex_;
+    auto join() -> void
+    {
+        // TODO: If thread is not stopped: Increase thread priority and yield ...
+    }
 
-    friend auto thread::keepout::func<Stacksize, Context>(void * thread) -> void *;
+private:
+    Task task_;                /**< Thread task function */
+    Context context_;          /**< Thread context for argument exchange */
+    char const * const name_;  /**< Thread name */
+    kernel_pid_t pid_;         /**< Thread Id of running thread */
+
+    friend auto thread::keepout::func<Context, Stacksize>(void * thread) -> void *;
 };
 
 namespace thread
 {
 namespace keepout
 {
-template <std::size_t Stacksize, typename Context>
+template <typename Context, std::size_t Stacksize>
 auto func(void * thread) -> void *
 {
     // Get Reference to thread Object
-    Thread<Stacksize>& ref = *((Thread<Stacksize, Context> *) thread);
+    Thread<Context, Stacksize>& th = *((Thread<Context, Stacksize> *) thread);
 
     // Set Threads PID
-    ref.pid_ = thread_getpid();
+    th.pid_ = thread::getPid();
 
     // Execute Thread Function
-    ref.task_(ref);
+    th.task_(th);
 
     return NULL;
 }

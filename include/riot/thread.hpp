@@ -21,6 +21,7 @@
  * @}
  */
 
+#include "thread/stack_impl.hpp"
 #include "thread/thread_impl.hpp"
 
 #endif // THREAD_HPP
